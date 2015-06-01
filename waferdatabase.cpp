@@ -10,41 +10,41 @@ CChip* CWaferDataBase::GetFirst()
 	CChip *p = first;
 	while (p)
 	{
-		if (p->multi <= 1) return p;
+		if (p->multiNum == 0) return p;
 		p = p->next;
 	}
-	return NULL;
+	return 0;
 }
 
 
 CChip* CWaferDataBase::GetPrev(CChip *chip)
 {
-	CChip *p = chip ? chip->prev : NULL;
+	CChip *p = chip ? chip->prev : 0;
 	while (p)
 	{
-		if (p->multi <= 1) return p;
+		if (p->multiNum == 0) return p;
 		p = p->prev;
 	}
-	return NULL;
+	return 0;
 }
 
 
 CChip* CWaferDataBase::GetNext(CChip *chip)
 {
-	CChip *p = chip ? chip->next : NULL;
+	CChip *p = chip ? chip->next : 0;
 	while (p)
 	{
-		if (p->multi <= 1) return p;
+		if (p->multiNum == 0) return p;
 		p = p->next;
 	}
-	return NULL;
+	return 0;
 }
 
 
 bool CWaferDataBase::Add(CChip *chip)
 {
 	chip->prev = last;
-	chip->next = NULL;
+	chip->next = 0;
 	if (last) last->next = chip;
 	last = chip;
 	if (!first) first = chip;
@@ -62,14 +62,14 @@ void CWaferDataBase::DeleteAllChips()
 		p = p->next;
 		delete q;
 	}
-	first = last = NULL;
+	first = last = 0;
 	chipCount = 0;
 }
 
 
 void CWaferDataBase::Swap(CChip *entry)
 {
-	if (entry->next == NULL) return;
+	if (entry->next == 0) return;
 
 	CChip *p = entry->next;
 	if (entry->prev) entry->prev->next = p; else first = p;
@@ -104,23 +104,21 @@ void CWaferDataBase::SortPicOrder()
 // chips must be sorted before (SortPicOrder)
 void CWaferDataBase::CalcMulti()
 {
-	CChip *p, *s, *best;
+	CChip *p, *s;
 	p = first;
 	while (p)
 	{
-		best = p;
-		p->multi = 0;
+		int cnt = 0;
 		s = p->next;
-		while (s)
+		while (s && (*s == *p))
 		{
-			s->multi = 1;
-			if (!(*s == *p)) break;
-			if (s->failCode > best->failCode) best = s;
+			cnt++;
 			s = s->next;
 		}
-		while(p != s && p)
+		for (int i = cnt; i >= 0; i--)
 		{
-			p->multi = (p == best) ? 0 : 2;
+			p->multiCount = cnt;
+			p->multiNum   = i;
 			p = p->next;
 		}
 	}

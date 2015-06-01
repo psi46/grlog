@@ -418,7 +418,7 @@ void CChipView::DrawInfo()
 
 	// Chip id
 	sprintf(s,"Chip:   %i%i%c (%i/%i) test: %i", fChip->mapY, fChip->mapX,
-		"CDAB"[fChip->mapPos], fChip->picX, fChip->picY, fChip->multi);
+		"CDAB"[fChip->mapPos], fChip->picX, fChip->picY, fChip->multiCount);
 	t.DrawText(0.05,0.93,s);
 
 	DrawInfoInt(posx, y++, "Log entry:", fChip->nEntry);

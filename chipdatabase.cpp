@@ -84,7 +84,8 @@ void CChip::Clear()
 
 // --- some derived values
 
-	multi     = 0;
+	multiCount = 0;
+	multiNum   = 0;
 
 	chipClass = 5;
 	pickClass = 5;

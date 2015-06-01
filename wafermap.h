@@ -55,7 +55,7 @@ public:
 	~CChipBox();
 	float GetValue() {  return fValue; }
 	void SetColor(int colNum);
-	void Draw() { fChip->Draw(); }
+	void Draw();
 	friend class TChipBox;
 	friend class CWaferMap;
 };

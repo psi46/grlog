@@ -66,6 +66,21 @@ void CChipBox::SetColor(int colNum)
 }
 
 
+void CChipBox::Draw()
+{
+	char s[16];
+	fChip->Draw();
+	if (fChipData->multiCount)
+	{
+		double x = fChip->GetX1() + 0.012;
+		double y = fChip->GetY1() + 0.020;
+		sprintf(s, "%i", fChipData->multiCount);
+		TText t;
+		t.SetTextSize(0.02);
+		t.DrawText(x, y, s);
+	}
+}
+
 
 // --- wafer map ---------------------------------------------------------
 

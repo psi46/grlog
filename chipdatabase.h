@@ -141,7 +141,8 @@ public:
 	void CalcPicPos();
 
 //  number of entries in log file for this ROC
-	int multi;
+	int multiCount;
+	int multiNum;
 
 //  pixel shreshold statistics
 	int n;              // number of pixels in statistic
