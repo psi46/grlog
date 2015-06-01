@@ -109,9 +109,11 @@ void CWaferDataBase::CalcMulti()
 	while (p)
 	{
 		best = p;
+		p->multi = 0;
 		s = p->next;
 		while (s)
 		{
+			s->multi = 1;
 			if (!(*s == *p)) break;
 			if (s->failCode > best->failCode) best = s;
 			s = s->next;
@@ -191,6 +193,7 @@ void CWaferDataBase::Calculate()
 	while (p)
 	{
 		p->CalculatePhase2();
+		p->GetFailString();
 		p = GetNextM(p);
 	}
 
@@ -486,7 +489,7 @@ void CWaferDataBase::GenerateFailStrings()
 	CChip *p = GetFirst();
 	while (p)
 	{
-			p->getFailString();
+			p->GetFailString();
 			printf("%s\n",p->failstring.c_str());
 		p = GetNext(p);
 	}

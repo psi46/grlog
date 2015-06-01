@@ -220,8 +220,8 @@ protected:
 
 	void Pic();
 private:
-	void getCurrent(CScanner &Log, double *Idig,double *Iana);
-	void getFailString();
+	void GetCurrent(CScanner &Log, double *Idig,double *Iana);
+	void GetFailString();
 	friend class CScanner;
 	friend struct CLogFile;
 	friend class CWaferDataBase;

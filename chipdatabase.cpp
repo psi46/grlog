@@ -98,7 +98,7 @@ void CChip::Clear()
 }
 
 
-void CChip::getCurrent(CScanner &Log, double *Idig, double *Iana)
+void CChip::GetCurrent(CScanner &Log, double *Idig, double *Iana)
 {
 	if (Log.getLine()[0] == 0) return;
 	char s[8];
@@ -263,8 +263,8 @@ void CChip::ReadPON(CScanner &Log)
 {
 	if (sscanf(Log.getNextLine(),"%i", &nEntry)!=1)	ERROR_ABORT(ERROR_PON)
 	Log.getNextLine();
-	getCurrent(Log,&IdigOn,&IanaOn);
-	getCurrent(Log,&IdigOn,&IanaOn);
+	GetCurrent(Log,&IdigOn,&IanaOn);
+	GetCurrent(Log,&IdigOn,&IanaOn);
 	Log.getNextSection();
 }
 
@@ -272,8 +272,8 @@ void CChip::ReadINIT(CScanner &Log)
 {
 	Log.getNextLine();
 	Log.getNextLine();
-	getCurrent(Log,&IdigInit,&IanaInit);
-	getCurrent(Log,&IdigInit,&IanaInit);
+	GetCurrent(Log,&IdigInit,&IanaInit);
+	GetCurrent(Log,&IdigInit,&IanaInit);
 	existINIT = true;
 	Log.getNextSection();
 }
@@ -696,7 +696,7 @@ void CChip::CalculatePhase2()
 }
 
 
-void CChip::getFailString()
+void CChip::GetFailString()
 {
 	char s[128];
 
