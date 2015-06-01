@@ -1,0 +1,282 @@
+/logo
+{
+  newpath 72 20 20 0 360 arc closepath 0.8 setgray fill
+  newpath 52 20 20 0 360 arc closepath 0.7 setgray fill
+  /Helvetica-Bold findfont [41 0 8 16 0 0] makefont setfont
+  0 setgray
+  newpath 0 11 moveto (WMap) true charpath
+  gsave 1 setgray fill grestore
+  0.3 setlinewidth stroke
+  
+  /Helvetica findfont [10 0 4 8 0 0] makefont setfont
+  0 setgray
+  5 0 moveto (Beat Meier) show
+  
+  /Helvetica-Bold findfont [16 0 4 8 0 0] makefont setfont
+  3 0 rmoveto (PSI LTP) show
+} bind def
+
+% wafer map -----------------------------------------------
+
+% periodicity (notch right)
+/pitchX 17.658 def
+/pitchY 21.338 def
+
+/colorWafer { 0.9 setgray }def
+/colorRect  { 0.7 setgray }def
+
+/colorBinTable
+[
+[0.0 0.0 0.0] %  0 black
+[0.5 0.5 0.5] %  1 dark gray
+[.75 1.0 .25] %  2 light gray
+[1.0 1.0 1.0] %  3 white
+
+[0.7 0.0 0.0] %  4 dark red
+[1.0 0.0 0.0] %  5 red
+[1.0 0.0 0.4] %  6 light red
+
+[0.0 0.3 0.0] %  7 dark green
+[0.0 .75 0.0] %  8 green
+[0.0 1.0 0.0] %  9 green
+[.75 1.0 0.0] % 10 yellow green
+[0.7 1.0 0.7] % 11 light green
+
+[0.0 0.5 0.5] % 12 dark blue green
+
+[0.0 0.0 1.0] % 13 dark blue
+[.25 0.5 1.0] % 14 blue
+[0.0 .75 1.0] % 15 blue
+[0.5 .75 1.0] % 16 blue
+[0.0 1.0 1.0] % 17 light blue
+[0.5 1.0 1.0] % 18 light blue
+
+[0.5 .25 0.0] % 19 dark brown
+[.75 0.5 0.0] % 20 brown
+[1.0 0.5 0.25] % 21
+[1.0 0.5 0.0] % 22 orange
+[1.0 1.0 0.0] % 23 yellow
+[1.0 1.0 0.85] % 24 light yellow
+
+[0.5 0.0 0.5] % 25 dark red blue
+[1.0 0.0 1.0] % 26 red blue
+[1.0 0.5 1.0] % 27 light red blue
+] def
+
+/colorBin
+{
+  colorBinTable exch get aload pop setrgbcolor
+} bind def
+
+/legendEntry
+{
+  gsave
+  translate
+  newpath
+  0 0 moveto 6 0 lineto 6 4 lineto 0 4 lineto closepath
+  colorBin fill
+  newpath
+  0 0 moveto 6 0 lineto 6 4 lineto 0 4 lineto closepath
+  0 setgray 0.2 setlinewidth stroke
+  8 0.5 moveto show
+  10 string cvs dup stringwidth pop neg -2 add 0.5 moveto show
+  grestore
+}bind def
+
+/legend_bin
+{
+  5 fontSize
+  yield  0 get (ok)                   8 -95 -110 legendEntry
+  yield  1 get (shortcut)             5 -95 -116 legendEntry
+  yield  2 get (I < 5mA)             23 -95 -122 legendEntry
+  yield  3 get (missing token)       21 -95 -128 legendEntry
+  yield  4 get (i2c error)           24 -95 -134 legendEntry
+  
+  yield  5 get (>= 5 dcol defect)    25 -25 -110 legendEntry
+  yield  6 get (2...4 dcol defect)   26 -25 -116 legendEntry
+  yield  7 get (1 dcol defect)       27 -25 -122 legendEntry
+
+  yield  8 get (>= 30 pixel defect)  12  45 -110 legendEntry
+  yield  9 get (10...29 pixel defect)13  45 -116 legendEntry
+  yield 10 get (3...9 pixel defect)  14  45 -122 legendEntry
+  yield 11 get (2 pixel defect)      16  45 -128 legendEntry
+  yield 12 get (1 pixel defect)      18  45 -134 legendEntry
+}def
+
+/legend_fail
+{
+  5 fontSize
+  yield  0 get (CL5: shortcut)       5  -95 -110 legendEntry
+  yield  1 get (CL5: IdigOn <5mA)        4  -95 -116 legendEntry
+  yield  2 get (CL5: missing token)  0  -95 -122 legendEntry
+  yield  3 get (CL5: i2c error)      1 -95 -128 legendEntry
+  yield  4 get (CL5: >4000 pix def) 24 -95 -134 legendEntry
+
+  yield  6 get (CL4: >40 pix def)   23  -25 -110 legendEntry
+  yield  7 get (CL4: mask def)      22  -25 -116 legendEntry
+  yield  8 get (CL4: address def)   17  -25 -122 legendEntry
+  yield  9 get (CL4: IdigOn >65mA)  26   -25 -128 legendEntry
+  yield 10 get (CL4: IanaOn >65mA)  27   -25 -134 legendEntry
+
+  yield 11 get (CL4: IdigInit)        19   45 -110 legendEntry
+  yield 12 get (CL4: IanaInit)        20   45 -116 legendEntry
+  yield 13 get (CL3: >4 pix def)    25    45 -122 legendEntry
+  yield 22 get (CL2: 1..4 pix def)  13    45 -128 legendEntry
+  yield 23 get (CL1: good)             8   45 -134 legendEntry
+}def
+
+/legend_class
+{
+  5 fontSize
+  yield 0 get (Class 1)  8   -95 -110 legendEntry
+  yield 1 get (Class 2)  13  -95 -116 legendEntry
+  yield 2 get (Class 3)  25   -25 -110 legendEntry
+  yield 3 get (Class 4)  23  -25 -116 legendEntry
+  yield 4 get (Class 5)  5   45 -113 legendEntry
+}def
+
+/waferCoords
+{
+  gsave
+  pitchX pitchY scale
+  -4.97 -4.12 translate
+  newpath
+  0 1 10 { 0 moveto 0 9.08 rlineto }for
+  0 1  8 { -1.1 exch moveto 11.1 0 rlineto }for
+  0.005 setlinewidth stroke
+  newpath
+  0.5 0 moveto 0.5 1 lineto
+  0 0.5 moveto 1 0.5 lineto
+  stroke
+  0.4 fontSize
+  0.09 0.08 moveto (C)show
+  0.59 0.08 moveto (D)show
+  0.09 0.58 moveto (A)show
+  0.59 0.58 moveto (B)show 
+
+  0.25 fontSize
+  0.33 8.9 moveto (Y0) show
+  1.33 8.9 moveto (Y1) show
+  2.33 8.9 moveto (Y2) show
+  3.33 8.9 moveto (Y3) show
+  4.33 8.9 moveto (Y4) show
+  5.33 8.9 moveto (Y5) show
+  6.33 8.9 moveto (Y6) show
+  7.33 8.9 moveto (Y7) show
+  8.33 8.9 moveto (Y8) show
+  9.33 8.9 moveto (Y9) show
+  -1.1 7.42 moveto (0X) show
+  -1.1 6.42 moveto (1X) show
+  -1.1 5.42 moveto (2X) show
+  -1.1 4.42 moveto (3X) show
+  -1.1 3.42 moveto (4X) show
+  -1.1 2.42 moveto (5X) show
+  -1.1 1.42 moveto (6X) show
+  -1.1 0.42 moveto (7X) show
+  grestore
+}bind def
+
+/waferOutline
+{
+  newpath
+  0 0 100 8 352 arc
+  closepath
+} bind def
+
+/rectOutline
+{
+  newpath
+   0  0 moveto
+  16.9  0 lineto
+  16.9 20.6 lineto
+   0 20.6 lineto
+  closepath
+} bind def
+
+/chipPos
+{ % ABCD
+  [0.05 0.1  8.48 0.1  0.05 10.32  8.45 10.32]
+  exch 2 mul 2 getinterval aload pop translate
+} bind def
+
+/chipOutline
+{
+  newpath
+  0 0 moveto
+  8.35 0 rlineto
+  0 10.2 rlineto
+  -8.35 0 rlineto
+  closepath
+} bind def
+
+/rectPos
+{
+  pitchY neg mul exch pitchX mul exch translate
+  -87.316 62.0 translate
+% /pitchX 17.658 def
+% /pitchY 21.338 def
+% -52.0 62.0 translate
+} bind def
+
+/chip
+{
+  gsave
+  rectPos
+  chipPos
+  colorBin
+  chipOutline fill
+  chipOutline 0.2 setlinewidth colorLine stroke
+  grestore
+} bind def
+
+/rect
+{
+  gsave
+  rectPos
+  rectOutline colorRect fill
+  grestore
+} bind def
+
+/waferMap
+{
+  waferCoords
+  legend
+  0.3 setlinewidth
+  waferOutline colorWafer fill
+  gsave
+  waferOutline clip
+  -1 1 8 { 0 1 10 { 1 index rect } for pop } for
+  -1 1 rect -1 2 rect -1 5 rect -1 6 rect  
+  { aload pop chip } forall
+  
+  6 fontSize colorText
+  -90 0 translate 90 rotate
+  waferId
+  dup stringwidth pop -2 div 0 moveto 
+  show
+
+  grestore
+  waferOutline colorLine stroke
+} bind def
+
+/wafermapPage
+{
+  18 fontSize colorText
+  62  780 moveto (Wafer ID:) show
+  180 780 moveto waferId show
+  62  760 moveto (ROC type:) show
+  180 760 moveto productId show
+  62  740 moveto (Tested:) show
+  180 740 moveto testDate show
+  62  720 moveto (Test center:) show
+  180 720 moveto center show
+  62  700 moveto (Plot type:) show
+  180 700 moveto plotType show
+
+  gsave 450 35 translate 0.7 0.7 scale logo grestore
+  gsave
+  314 420 translate
+  2.3 2.3 scale
+  waferMap
+  grestore
+} def
