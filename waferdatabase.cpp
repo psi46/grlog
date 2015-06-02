@@ -5,6 +5,8 @@
 
 // === chip list operations =================================================
 
+// --- Iterates through ROCs and skips multiple tests of the same ROC -------
+
 CChip* CWaferDataBase::GetFirst()
 {
 	CChip *p = first;
@@ -39,6 +41,101 @@ CChip* CWaferDataBase::GetNext(CChip *chip)
 	}
 	return 0;
 }
+
+
+// ---- Iterates through good ROCs (skips multiple tests) -------------------
+
+CChip* CWaferDataBase::GetFirstGood()
+{
+	CChip *p = first;
+	while (p)
+	{
+		if (p->chipClass == 1 && p->multiNum == 0) return p;
+		p = p->next;
+	}
+	return 0;
+}
+
+
+CChip* CWaferDataBase::GetPrevGood(CChip *chip)
+{
+	CChip *p = chip ? chip->prev : 0;
+	while (p)
+	{
+		if (p->chipClass == 1 && p->multiNum == 0) return p;
+		p = p->prev;
+	}
+	return 0;
+}
+
+
+CChip* CWaferDataBase::GetNextGood(CChip *chip)
+{
+	CChip *p = chip ? chip->next : 0;
+	while (p)
+	{
+		if (p->chipClass == 1 && p->multiNum == 0) return p;
+		p = p->next;
+	}
+	return 0;
+}
+
+
+// --- Iterates through bad ROCs (skips multiple tests) ---------------------
+
+CChip* CWaferDataBase::GetFirstBad()
+{
+	CChip *p = first;
+	while (p)
+	{
+		if (p->chipClass != 1 && p->multiNum == 0) return p;
+		p = p->next;
+	}
+	return 0;
+}
+
+
+CChip* CWaferDataBase::GetPrevBad(CChip *chip)
+{
+	CChip *p = chip ? chip->prev : 0;
+	while (p)
+	{
+		if (p->chipClass != 1 && p->multiNum == 0) return p;
+		p = p->prev;
+	}
+	return 0;
+}
+
+
+CChip* CWaferDataBase::GetNextBad(CChip *chip)
+{
+	CChip *p = chip ? chip->next : 0;
+	while (p)
+	{
+		if (p->chipClass != 1 && p->multiNum == 0) return p;
+		p = p->next;
+	}
+	return 0;
+}
+
+
+// --- Iterates through multiple tests --------------------------------------
+
+CChip* CWaferDataBase::GetPrevTest(CChip *chip)
+{
+	CChip *p = chip ? chip->prev : 0;
+	if (p) if (*p == *chip) return p;
+	return 0;
+}
+
+
+CChip* CWaferDataBase::GetNextTest(CChip *chip)
+{
+	CChip *p = chip ? chip->next : 0;
+	if (p) if (*p == *chip) return p;
+	return 0;
+}
+
 
 
 bool CWaferDataBase::Add(CChip *chip)

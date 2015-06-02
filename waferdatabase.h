@@ -28,13 +28,30 @@ public:
 	CWaferDataBase() : first(0), last(0), chipCount(0) {}
 	~CWaferDataBase() { DeleteAllChips(); }
 
+	// Iterates through all ROCs
 	CChip* GetFirstM() { return first; }
-	static CChip* GetPrevM(CChip *chip) { return chip ? chip->prev : NULL; }
-	static CChip* GetNextM(CChip *chip) { return chip ? chip->next : NULL; }
+	static CChip* GetPrevM(CChip *chip) { return chip ? chip->prev : 0; }
+	static CChip* GetNextM(CChip *chip) { return chip ? chip->next : 0; }
 
+	// Iterates through ROCs and skips multiple tests of the same ROC
 	CChip* GetFirst();
 	static CChip* GetPrev(CChip *chip);
 	static CChip* GetNext(CChip *chip);
+
+	// Iterates through good ROCs (skips multiple tests)
+	CChip* GetFirstGood();
+	static CChip* GetPrevGood(CChip *chip);
+	static CChip* GetNextGood(CChip *chip);
+
+	// Iterates through bad ROCs (skips multiple tests)
+	CChip* GetFirstBad();
+	static CChip* GetPrevBad(CChip *chip);
+	static CChip* GetNextBad(CChip *chip);
+
+	// Iterates through multiple tests
+	static CChip* GetPrevTest(CChip *chip);
+	static CChip* GetNextTest(CChip *chip);
+
 
 	bool Add(CChip *chip);
 	void DeleteAllChips();
