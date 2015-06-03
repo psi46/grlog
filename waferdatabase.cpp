@@ -423,6 +423,12 @@ bool CWaferDataBase::GenerateJSONfile(const std::string &filename)
 		}
 		//-----
 
+		//to set -1 to variables not present in the log file:
+		if(!chip.existREADBACK) { 
+			chip.vdig_u_adc = chip.vdig_u_value = chip.vana_u_adc = chip.vana_u_value = -1;
+			chip.vana_r_adc = chip.vbg_adc = chip.iana_adc = chip.iana_value = -1;
+		}
+
 		sstr << "{\"ROC_ID\": \""     << rocId << "\", ";
 		sstr << "\"ROC_TYPE\": \""    << productId << "\", ";
 		sstr << "\"TEST_DATE\": \""   << chip.startTime.GetXmlDateTime() << "\", ";
