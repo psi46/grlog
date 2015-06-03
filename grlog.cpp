@@ -12,16 +12,16 @@
 CWaferDataBase waferData;
 
 
-int ReadLogFile(char filename[])
+int ReadLogFile(const std::string &filename)
 {
 	CLogFile p;
 
 	// === Read log file =======================================================
 
-	printf("Open File: %s\n", gName.GetLogFileName());
+	printf("Open File: %s\n", gName.GetName_Log().c_str());
 	try
 	{
-		p.Open(filename);
+		p.Open(filename.c_str());
 		p.Read(waferData);
 	}
 	catch (CLogError &e)
@@ -54,11 +54,10 @@ int main(int argc, char* argv[])
 
 	if (!gName.Process(argc, argv)) return 1;
 
-	char s[256];
-	_mkdir(gName.GetPath(s,NULL));
+//	_mkdir(gName.GetPath().c_str());
 
 	// === read logfile -> waferData ===========================================
-	int res = ReadLogFile(gName.GetLogFileName());
+	int res = ReadLogFile(gName.GetName_Log());
 	if (res) return res;
 
 	// === Start GUI ===========================================================

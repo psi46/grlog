@@ -301,7 +301,6 @@ void CChipView::DoGoNextGoodChip()
 
 void CChipView::PrintChipView()
 {
-	char s[256];
 	char *p;
 	char t[12];
 
@@ -319,7 +318,7 @@ void CChipView::PrintChipView()
 	sprintf(t, "%i%i%c_%s", fChip->mapY, fChip->mapX, "CDAB"[fChip->mapPos],
 		p);
 	TCanvas *fCanvas = fEcanvas->GetCanvas();
-	fCanvas->Print(gName.GetName(s, NULL, t, "ps",1));
+	fCanvas->Print(gName.GetName().c_str());
 }
 
 

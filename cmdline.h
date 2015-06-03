@@ -1,26 +1,65 @@
 // cmdline.h
 
+#pragma once
 
-#ifndef CMDLINE_H
-#define CMDLINE_H
+#include <string>
 
 
 class CCmdLineParameter
 {
-	char logFileName[150];
-	char name[64];
-	void SetDefaultParam();
+	int dataStructure;  // 1 = PSI
+
+	std::string logPath;
+	std::string logName;
+	std::string logType;
+
+	std::string logFileName;
+	std::string name;
+	void SplitName(const std::string &s);
+
+	void GenerateNames();
+	void GenNamesPSI();
+
+	std::string path_Report;
+	std::string name_Report;
+	std::string path_ClassList;
+	std::string name_ClassList;
+	std::string path_FailList;
+	std::string name_FailList;
+	std::string path_Statistics;
+	std::string name_Statistics;
+	std::string path_Pick;
+	std::string name_Pick;
+	std::string path_JSON;
+	std::string name_JSON;
+	std::string path_XML;
+	std::string path_WaferMap;
+	std::string name_WaferMap;
 public:
 	void Help();
 	bool Process(int argc, char* argv[]);
-	char* GetLogFileName() { return logFileName; }
-	char* GetName()        { return name; }
-	char* GetPath(char*s, const char* path);
-	char* GetName(char*s, const char* path, const char* append, const char* ext, bool dir);
+
+	std::string GetName()     { return logName; }
+	std::string GetName_Log() { return logFileName; }
+
+	std::string GetPath_Report() { return path_Report; }
+	std::string GetPath_ClassList() { return path_ClassList; }
+	std::string GetPath_FailList() { return path_FailList; }
+	std::string GetPath_Statistics() { return path_Statistics; }
+	std::string GetPath_Pick() { return path_Pick; }
+	std::string GetPath_JSON() { return path_JSON; }
+	std::string GetPath_XML() { return path_XML; }
+	std::string GetPath_WaferMap() { return path_WaferMap; }
+
+	std::string GetName_Report() { return name_Report; }
+	std::string GetName_ClassList() { return name_ClassList; }
+	std::string GetName_FailList() { return name_FailList; }
+	std::string GetName_Statistics() { return name_Statistics; }
+	std::string GetName_Pick() { return name_Pick; }
+	std::string GetName_JSON() { return name_JSON; }
+	std::string GetName_WaferMap(const std::string &suffix) { return name_WaferMap + suffix + ".ps"; }
 };
 
 
 extern CCmdLineParameter gName;
 
-
-#endif

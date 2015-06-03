@@ -6,13 +6,6 @@
 CCmdLineParameter gName;
 
 
-void CCmdLineParameter::SetDefaultParam()
-{
-	logFileName[0] = 0;
-	name[0] = 0;
-}
-
-
 void CCmdLineParameter::Help()
 {
 	puts
@@ -23,66 +16,101 @@ void CCmdLineParameter::Help()
 }
 
 
+// s -> logPath, logName, logType
+void CCmdLineParameter::SplitName(const std::string &s)
+{
+	std::string s2;
+	size_t p = s.find_last_of("/\\");
+	if (p != std::string::npos)
+	{
+		logPath = s.substr(0, p+1);
+		s2 = s.substr(p+1);
+	}
+	else
+	{
+		logPath = "";
+		s2 = s;
+	}
+
+	p = s2.find_last_of(".");
+	if ((p != std::string::npos) && (p != 0))
+	{
+		logName = s2.substr(0, p);
+		logType = s2.substr(p);
+	}
+	else
+	{
+		logName = s2;
+		logType = "";
+	}
+}
+
+
 bool CCmdLineParameter::Process(int argc, char* argv[])
 {
-	SetDefaultParam();
 	if (argc < 2) { puts("too few arguments!\n"); Help(); return false; }
 
-	int i = 1;
-	while (i<argc)
+	dataStructure = 0;
+	logFileName = "";
+	for (int i = 1; i<argc; i++)
 	{
 		if (argv[i][0] == '-')
 		{
 			switch (argv[i][1])
 			{
 			case 'h': Help(); break;
+			case 'p': dataStructure = 1;
 			default: puts("illegal argument!\n"); Help(); return false;
 			}
 		}
 		else
 		{
-			strncpy(logFileName, argv[i], 63);
-			strncpy(name, argv[i], 63);
-			int pos = strlen(name) - 1;
-			while (pos > 0)
-			{
-				if (name[pos] == '.') { name[pos] = 0; break; }
-				pos--;
-			}
+			logFileName = argv[i];
 		}
-		i++;
 	}
-	if (name[0] == 0) { puts("no file name!\n"); Help(); return false; }
+
+	if (logFileName.length() == 0) { Help(); return false; }
+	SplitName(logFileName);
+	if (logName.length() == 0) { Help(); return false; }
+
+	GenerateNames();
+
 	return true;
 }
 
 
-
-// path structure
-// wafer_<name> [\ <path>]
-
-char* CCmdLineParameter::GetPath(char* s, const char* path)
+void CCmdLineParameter::GenerateNames()
 {
-	strcpy(s, "wafer_");
-	strcat(s, GetName());
-	if (path) {  strcat(s, "\\"); strcat(s, path); }
-	return s;
-}
-
-
-// name structure
-// wafer_<name> \ [<name>] [_<append>] [.<ext>]
-
-char* CCmdLineParameter::GetName(char* s,
-	const char* path, const char* append, const char* ext, bool dir)
-{
-	if(dir){ GetPath(s,path);
-			 strcat(s, "\\"); } 
-	else { strcpy(s, "");
-			if (path) {  strcat(s, path); strcat(s, "\\");}
+	switch (dataStructure)
+	{
+		case 1: GenNamesPSI(); break;
+		default: GenNamesPSI();
 	}
-	strcat(s, GetName()); 
-	if (append) { strcat(s, "_"); strcat(s, append); }
-	if (ext)    { strcat(s, "."); strcat(s, ext); }
-	return s;
 }
+
+
+void CCmdLineParameter::GenNamesPSI()
+{
+	// --- Data structure (PSI version)
+
+	std::string path = logPath + "report\\";
+	_mkdir(path.c_str());
+
+	path_Report     = path;
+	path_ClassList  = path;
+	path_FailList   = path;
+	path_Statistics = path;
+	path_Pick       = path;
+	path_JSON       = path + "database\\";
+	path_XML        = path;
+	path_WaferMap   = path + "maps\\";
+
+	name_Report     = path_Report + logName + "_report.txt";
+	name_ClassList  = path_ClassList + logName + "_classlist.txt";
+	name_FailList   = path_FailList + logName + "_FailList.txt";
+	name_Statistics = path_Statistics + logName + "_stat.txt";
+	name_Pick       = path_Pick + logName + "_pick.txt";
+	name_JSON       = path_JSON + logName + "_db.json";
+	name_WaferMap   = path_WaferMap + logName + "_wmap_";
+}
+

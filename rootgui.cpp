@@ -102,6 +102,9 @@ GrLogMainFrame::GrLogMainFrame(CWaferDataBase &waferData,
 	// --- button "PD report"
 	AddButton(buttonFrame, "&pd report", "DoPDReport()");  //for PD results and internal db
 
+	// --- button "PSI report"
+	AddButton(buttonFrame, "&pd report", "DoPSIReport()");  //for wafer classification
+
 	// --- button "wafer map"
 	AddButton(buttonFrame, "&wafer map", "DoGenerateWaferMap()");
 
@@ -265,76 +268,82 @@ void GrLogMainFrame::DoOpenChip()
 
 void GrLogMainFrame::DoReport() //renamed
 {
-	char s[256];
-	_mkdir(gName.GetPath(s,NULL));
-		if (fDatabase.GenerateDataTable(gName.GetName(s,NULL,"report","txt",1)))
-		printf("Report %s created.\n", s);
+	std::string filename = gName.GetName_Report();
+	_mkdir(gName.GetPath_Report().c_str());
+	if (fDatabase.GenerateDataTable(filename))
+		printf("Report %s created.\n", filename.c_str());
 	else
-		printf("Could not create %s!\n", s);
+		printf("Could not create &s!\n", filename.c_str());
 }
+
 
 void GrLogMainFrame::DoClassList() //new
 {
-	char s[256];
-	_mkdir(gName.GetPath(s,NULL));
-		if (fDatabase.GenerateClassList(gName.GetName(s,NULL,"classlist","txt",0)))
-		printf("Class List %s created.\n", s);
+	std::string filename = gName.GetName_ClassList();
+
+	_mkdir(gName.GetPath_ClassList().c_str());
+	if (fDatabase.GenerateClassList(filename))
+		printf("Class list %s created.\n", filename.c_str());
 	else
-		printf("Could not create %s!\n", s);
+		printf("Could not create class list %s!\n", filename.c_str());
 }
+
 
 void GrLogMainFrame::DoFailList() //renamed.
 {
-	char s[256];
-	_mkdir(gName.GetPath(s,NULL));
-	if (fDatabase.GenerateErrorReport(gName.GetName(s,NULL,"FailList","txt",1)))
-	printf("Fail list %s created.\n", s);
+	std::string filename = gName.GetName_FailList();
+	_mkdir(gName.GetPath_FailList().c_str());
+	if (fDatabase.GenerateErrorReport(filename))
+		printf("Fail list %s created.\n", filename.c_str());
 	else
-		printf("Could not create %s!\n", s);
+		printf("Could not create fail list %s!\n", filename.c_str());
 }
 
 
 void GrLogMainFrame::DoStatistics()
 {
-	char s[256];
+	std::string filename = gName.GetName_Statistics();
 	//_mkdir(gName.GetPath(s,NULL));
-	if (fDatabase.GenerateStatistics(gName.GetName(s,NULL,"stat","txt",1)))
-		printf("Statistics file %s created.\n", s);
+	if (fDatabase.GenerateStatistics(filename))
+		printf("Statistics file &s created.\n", filename.c_str());
 	else
-		printf("Could not create %s!\n", s);
+		printf("Could not create %s!\n", filename.c_str());
 }
 
 
 void GrLogMainFrame::DoGeneratePickFile()
 {
-	char s[256];
-	_mkdir(gName.GetPath(s,NULL));
-	if (fDatabase.GeneratePickFile(gName.GetName(s,NULL,"pick","txt",1)))
-		printf("Pick file %s created.\n", s);
+	std::string filename = gName.GetName_Pick();
+	_mkdir(gName.GetPath_Pick().c_str());
+	if (fDatabase.GeneratePickFile(filename))
+		printf("Pick file %s created.\n", filename.c_str());
 	else
-		printf("Could not create %s!\n", s);
+		printf("Could not create %s!\n", filename.c_str());
 }
+
 
 void GrLogMainFrame::DoGenerateJSONfile() //json file for the official db
 {
-	char s[256];
-	if (fDatabase.GenerateJSONfile(gName.GetName(s,NULL,"db","json",0)))
-		printf("JSON file %s created.\n", s);
+	std::string filename = gName.GetName_JSON();
+	_mkdir(gName.GetPath_JSON().c_str());
+	if (fDatabase.GenerateJSONfile(filename))
+		printf("JSON file %s created.\n", filename.c_str());
 	else
-		printf("Could not create %s!\n", s);
+		printf("Could not create %s!\n", filename.c_str());
 }
+
 
 void GrLogMainFrame::DoGenerateXMLfiles()
 {
-	char s[256];
-	_mkdir(gName.GetPath(s,NULL));
-	_mkdir(gName.GetPath(s,"database"));
+	std::string pathname = gName.GetPath_XML();
+	_mkdir(pathname.c_str());
 
-	if (fDatabase.GenerateXML(gName.GetPath(s,"database")))
-		printf("XML-files created.\n", s);
+	if (fDatabase.GenerateXML(pathname))
+		printf("XML-files created.\n");
 	else
 		printf("Could not create XML-files!\n");
 }
+
 
 void GrLogMainFrame::DoPDReport() //Padova test report
 {
@@ -345,6 +354,7 @@ void GrLogMainFrame::DoPDReport() //Padova test report
 	DoGenerateJSONfile();
 	DoClassList();
 }
+
 
 void GrLogMainFrame::DoFullReport()  //full report -- just maps and json file
 {
@@ -363,26 +373,34 @@ void GrLogMainFrame::DoFullReport()  //full report -- just maps and json file
 
 void GrLogMainFrame::DoGenerateWaferMap()
 {
-	char s[256], *t;
-	//_mkdir(gName.GetPath(s,NULL)); //commented to avoid too many folders
+	std::string filename;
+	_mkdir(gName.GetPath_WaferMap().c_str());
 	unsigned int mode;
 	switch (fWmapMode)
 	{
-		case WMAP_BIN:      mode = 0; t = "wmap_bin";   break;
-		case WMAP_FAILCODE: mode = 1; t = "wmap_fail";  break;
-		case WMAP_CLASS:    mode = 2; t = "wmap_class"; break;
-		default: printf("No wafermap of this type exist!\n"); return;
+		case WMAP_BIN:
+			mode = 0; 
+			filename = gName.GetName_WaferMap("bin");
+			break;
+		case WMAP_FAILCODE:
+			mode = 1;
+			filename = gName.GetName_WaferMap("fail");
+			break;
+		case WMAP_CLASS:
+			mode = 2;
+			filename = gName.GetName_WaferMap("class");
+			break;
+		default: return;
 	}
-	if (fDatabase.GenerateWaferMap(gName.GetName(s, NULL, t, "ps",0),mode)) //'0' to print in the working folder
-		printf("Wafer map %s created.\n", s);
+	if (fDatabase.GenerateWaferMap(filename, mode))
+		printf("Wafer map %s created.\n", filename.c_str());
 	else
-		printf("Could not create %s!\n", s);
+		printf("Could not create %s!\n", filename.c_str());
 }
 
 
 void GrLogMainFrame::PrintWaferMap()
 {
-	char s[256];
 	char *p;
 	switch (fWmapMode)
 	{
@@ -400,7 +418,7 @@ void GrLogMainFrame::PrintWaferMap()
 	}
 
 	TCanvas *fCanvas = fEcanvas->GetCanvas();
-	fCanvas->Print(gName.GetName(s, NULL, p, "ps",1));
+	fCanvas->Print(gName.GetName().c_str());
 }
 
 

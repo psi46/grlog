@@ -13,7 +13,7 @@ class CWaferDataBase
 	CChip *last;
 	unsigned int chipCount;
 	void Swap(CChip *entry);
-	bool WriteXML_File(char path[], CChip &chip);
+	bool WriteXML_File(const std::string &pathname, CChip &chip);
 
 	void SortPicOrder();
 	void SetPicGroups();
@@ -59,15 +59,14 @@ public:
 	unsigned int GetChipCount() { return chipCount; }
 
 
-	bool GeneratePickFile(char filename[]);
-	bool GenerateJSONfile(char filename[]);
-	bool GenerateXML(char path[]);
-	bool GenerateErrorReport(char filename[]);
-	bool GenerateClassList(char filename[]);
-	bool GenerateDataTable(char filename[]);
-	bool GenerateStatistics(const char filename[]);
-	bool GenerateWaferMap(char filename[], unsigned int mode);
-
+	bool GeneratePickFile(const std::string &filename);
+	bool GenerateJSONfile(const std::string &filename);
+	bool GenerateXML(const std::string &pathname);
+	bool GenerateErrorReport(const std::string &filename);
+	bool GenerateClassList(const std::string &filename);
+	bool GenerateDataTable(const std::string &filename);
+	bool GenerateStatistics(const std::string &filename);
+	bool GenerateWaferMap(const std::string &filename, unsigned int mode);
 
 	void Clear();
 	void Calculate();
