@@ -83,8 +83,8 @@ void CCmdLineParameter::GenerateNames()
 {
 	switch (dataStructure)
 	{
-		case 1: GenNamesPSI(); break;
-		default: GenNamesPSI();
+		case 1: GenNamesPSI(); break; // PSI report directory/naming structure structure
+		default: GenNamesPSI();  // rename and create method for default report directory structure
 	}
 }
 
