@@ -80,13 +80,17 @@ CChipView::CChipView(CChip *chip, const TGWindow *p, UInt_t w, UInt_t h)
 
 	AddButton(buttonFrame, "&next chip",   "DoGoNextChip()");
 
-	AddButton(buttonFrame, "&prev defect", "DoGoPrevDefectChip()");
+	AddButton(buttonFrame, "prev test",   "DoGoPrevChipTest()");
 
-	AddButton(buttonFrame, "&next defect", "DoGoNextDefectChip()");
+	AddButton(buttonFrame, "next test",   "DoGoNextChipTest()");
 
-	AddButton(buttonFrame, "&prev good",   "DoGoPrevGoodChip()");
+	AddButton(buttonFrame, "prev defect", "DoGoPrevDefectChip()");
 
-	AddButton(buttonFrame, "&next good",   "DoGoNextGoodChip()");
+	AddButton(buttonFrame, "next defect", "DoGoNextDefectChip()");
+
+	AddButton(buttonFrame, "prev good",   "DoGoPrevGoodChip()");
+
+	AddButton(buttonFrame, "next good",   "DoGoNextGoodChip()");
 
 	// --- button "print"
 	AddButton(buttonFrame, "p&rint",   "PrintChipView()");
@@ -235,77 +239,68 @@ void CChipView::DoGoNextChip()
 }
 
 
+void CChipView::DoGoPrevChipTest()
+{
+	CChip *chip = CWaferDataBase::GetPrevTest(fChip);
+	if (!chip) return;
+	fChip = chip;
+	SetTitle();
+	SetViewMode();
+}
+
+
+void CChipView::DoGoNextChipTest()
+{
+	CChip *chip = CWaferDataBase::GetNextTest(fChip);
+	if (!chip) return;
+	fChip = chip;
+	SetTitle();
+	SetViewMode();
+}
+
+
 void CChipView::DoGoPrevDefectChip()
 {
-	CChip *chip = CWaferDataBase::GetPrev(fChip);
-	while (chip)
-	{
-		if (chip->chipClass != 1)
-		{
-			fChip = chip;
-			SetTitle();
-			SetViewMode();
-			return;
-		}
-		chip = CWaferDataBase::GetPrev(chip);
-	}
+	CChip *chip = CWaferDataBase::GetPrevBad(fChip);
+	if (!chip) return;
+	fChip = chip;
+	SetTitle();
+	SetViewMode();
 }
 
 
 void CChipView::DoGoNextDefectChip()
 {
-	CChip *chip = CWaferDataBase::GetNext(fChip);
-	while (chip)
-	{
-		if (chip->chipClass != 1)
-		{
-			fChip = chip;
-			SetTitle();
-			SetViewMode();
-			return;
-		}
-		chip = CWaferDataBase::GetNext(chip);
-	}
+	CChip *chip = CWaferDataBase::GetNextBad(fChip);
+	if (!chip) return;
+	fChip = chip;
+	SetTitle();
+	SetViewMode();
 }
 
 
 void CChipView::DoGoPrevGoodChip()
 {
-	CChip *chip = CWaferDataBase::GetPrev(fChip);
-	while (chip)
-	{
-		if (chip->chipClass == 1)
-		{
-			fChip = chip;
-			SetTitle();
-			SetViewMode();
-			return;
-		}
-		chip = CWaferDataBase::GetPrev(chip);
-	}
+	CChip *chip = CWaferDataBase::GetPrevGood(fChip);
+	if (!chip) return;
+	fChip = chip;
+	SetTitle();
+	SetViewMode();
 }
 
 
 void CChipView::DoGoNextGoodChip()
 {
-	CChip *chip = CWaferDataBase::GetNext(fChip);
-	while (chip)
-	{
-		if (chip->chipClass == 1)
-		{
-			fChip = chip;
-			SetTitle();
-			SetViewMode();
-			return;
-		}
-		chip = CWaferDataBase::GetNext(chip);
-	}
+	CChip *chip = CWaferDataBase::GetNextGood(fChip);
+	if (!chip) return;
+	fChip = chip;
+	SetTitle();
+	SetViewMode();
 }
 
 
 void CChipView::PrintChipView()
 {
-	char s[256];
 	char *p;
 	char t[12];
 
@@ -323,7 +318,7 @@ void CChipView::PrintChipView()
 	sprintf(t, "%i%i%c_%s", fChip->mapY, fChip->mapX, "CDAB"[fChip->mapPos],
 		p);
 	TCanvas *fCanvas = fEcanvas->GetCanvas();
-	fCanvas->Print(gName.GetName(s, NULL, t, "ps",1));
+	fCanvas->Print(gName.GetName().c_str());
 }
 
 
@@ -417,8 +412,14 @@ void CChipView::DrawInfo()
 	t.DrawText(0.05,0.96,s);
 
 	// Chip id
-	sprintf(s,"Chip:   %i%i%c (%i/%i) test: %i", fChip->mapY, fChip->mapX,
-		"CDAB"[fChip->mapPos], fChip->picX, fChip->picY, fChip->multiCount);
+	if (fChip->multiCount)
+		sprintf(s,"Chip:   %i%i%c (%i/%i) (%i of %i)", fChip->mapY, fChip->mapX,
+			"CDAB"[fChip->mapPos], fChip->picX, fChip->picY,
+			fChip->multiCount - fChip->multiNum + 1, fChip->multiCount+1);
+	else
+		sprintf(s,"Chip:   %i%i%c (%i/%i)", fChip->mapY, fChip->mapX,
+			"CDAB"[fChip->mapPos], fChip->picX, fChip->picY);
+
 	t.DrawText(0.05,0.93,s);
 
 	DrawInfoInt(posx, y++, "Log entry:", fChip->nEntry);

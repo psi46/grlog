@@ -61,6 +61,8 @@ public:
 	void SetViewMode(int mode = -1);
 	void DoGoPrevChip();
 	void DoGoNextChip();
+	void DoGoPrevChipTest();
+	void DoGoNextChipTest();
 	void DoGoPrevDefectChip();
 	void DoGoNextDefectChip();
 	void DoGoPrevGoodChip();

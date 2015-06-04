@@ -5,6 +5,8 @@
 
 // === chip list operations =================================================
 
+// --- Iterates through ROCs and skips multiple tests of the same ROC -------
+
 CChip* CWaferDataBase::GetFirst()
 {
 	CChip *p = first;
@@ -39,6 +41,101 @@ CChip* CWaferDataBase::GetNext(CChip *chip)
 	}
 	return 0;
 }
+
+
+// ---- Iterates through good ROCs (skips multiple tests) -------------------
+
+CChip* CWaferDataBase::GetFirstGood()
+{
+	CChip *p = first;
+	while (p)
+	{
+		if (p->chipClass == 1 && p->multiNum == 0) return p;
+		p = p->next;
+	}
+	return 0;
+}
+
+
+CChip* CWaferDataBase::GetPrevGood(CChip *chip)
+{
+	CChip *p = chip ? chip->prev : 0;
+	while (p)
+	{
+		if (p->chipClass == 1 && p->multiNum == 0) return p;
+		p = p->prev;
+	}
+	return 0;
+}
+
+
+CChip* CWaferDataBase::GetNextGood(CChip *chip)
+{
+	CChip *p = chip ? chip->next : 0;
+	while (p)
+	{
+		if (p->chipClass == 1 && p->multiNum == 0) return p;
+		p = p->next;
+	}
+	return 0;
+}
+
+
+// --- Iterates through bad ROCs (skips multiple tests) ---------------------
+
+CChip* CWaferDataBase::GetFirstBad()
+{
+	CChip *p = first;
+	while (p)
+	{
+		if (p->chipClass != 1 && p->multiNum == 0) return p;
+		p = p->next;
+	}
+	return 0;
+}
+
+
+CChip* CWaferDataBase::GetPrevBad(CChip *chip)
+{
+	CChip *p = chip ? chip->prev : 0;
+	while (p)
+	{
+		if (p->chipClass != 1 && p->multiNum == 0) return p;
+		p = p->prev;
+	}
+	return 0;
+}
+
+
+CChip* CWaferDataBase::GetNextBad(CChip *chip)
+{
+	CChip *p = chip ? chip->next : 0;
+	while (p)
+	{
+		if (p->chipClass != 1 && p->multiNum == 0) return p;
+		p = p->next;
+	}
+	return 0;
+}
+
+
+// --- Iterates through multiple tests --------------------------------------
+
+CChip* CWaferDataBase::GetPrevTest(CChip *chip)
+{
+	CChip *p = chip ? chip->prev : 0;
+	if (p) if (*p == *chip) return p;
+	return 0;
+}
+
+
+CChip* CWaferDataBase::GetNextTest(CChip *chip)
+{
+	CChip *p = chip ? chip->next : 0;
+	if (p) if (*p == *chip) return p;
+	return 0;
+}
+
 
 
 bool CWaferDataBase::Add(CChip *chip)
@@ -226,10 +323,10 @@ void CWaferDataBase::CalculatePhase2()
 
 // === generate output files ================================================
 
-bool CWaferDataBase::GeneratePickFile(char filename[])
+bool CWaferDataBase::GeneratePickFile(const std::string &filename)
 {
 	if (first == NULL) return false;
-	FILE *f = fopen(filename, "wt");
+	FILE *f = fopen(filename.c_str(), "wt");
 	if (f == NULL) return false;
 
 	// count groups
@@ -303,10 +400,10 @@ bool CWaferDataBase::GeneratePickFile(char filename[])
 }
 
 
-bool CWaferDataBase::GenerateJSONfile(char filename[])
+bool CWaferDataBase::GenerateJSONfile(const std::string &filename)
 {
 	if (first == NULL) return false;
-	FILE *f = fopen(filename, "wt");
+	FILE *f = fopen(filename.c_str(), "wt");
 	if (f == NULL) return false;
 
 	CChip *p = GetFirst();
@@ -325,6 +422,12 @@ bool CWaferDataBase::GenerateJSONfile(char filename[])
 			else productId = "v2B";
 		}
 		//-----
+
+		//to set -1 to variables not present in the log file:
+		if(!chip.existREADBACK) { 
+			chip.vdig_u_adc = chip.vdig_u_value = chip.vana_u_adc = chip.vana_u_value = -1;
+			chip.vana_r_adc = chip.vbg_adc = chip.iana_adc = chip.iana_value = -1;
+		}
 
 		sstr << "{\"ROC_ID\": \""     << rocId << "\", ";
 		sstr << "\"ROC_TYPE\": \""    << productId << "\", ";
@@ -371,13 +474,13 @@ bool CWaferDataBase::GenerateJSONfile(char filename[])
 }
 
 
-bool CWaferDataBase::WriteXML_File(char path[], CChip &chip)
+bool CWaferDataBase::WriteXML_File(const std::string &pathname, CChip &chip)
 {
-	char filename[80];
+	std::string filename;
+	std::stringstream ss(filename);
+	ss << pathname << waferId << '_' << chip.mapY << chip.mapX << "CDAB"[chip.mapPos];
 
-	sprintf(filename, "%s\\%s_%i%i%c.xml", path, waferId.c_str(),
-		chip.mapY, chip.mapX, "CDAB"[chip.mapPos]);
-	FILE *f = fopen(filename,"wt");
+	FILE *f = fopen(filename.c_str(),"wt");
 	if (f==NULL) return false;
 
 	fputs(
@@ -471,12 +574,12 @@ bool CWaferDataBase::WriteXML_File(char path[], CChip &chip)
 }
 
 
-bool CWaferDataBase::GenerateXML(char path[])
+bool CWaferDataBase::GenerateXML(const std::string &pathname)
 {
 	CChip *p = GetFirst();
 	while (p)
 	{
-		if (!WriteXML_File(path, *p)) return false;
+		if (!WriteXML_File(pathname, *p)) return false;
 		p = GetNext(p);
 	}
 	return true;
@@ -494,9 +597,9 @@ void CWaferDataBase::GenerateFailStrings()
 	return;
 }
 
-bool CWaferDataBase::GenerateErrorReport(char filename[])
+bool CWaferDataBase::GenerateErrorReport(const std::string &filename)
 {
-	FILE *f = fopen(filename, "wt");
+	FILE *f = fopen(filename.c_str(), "wt");
 	if (f==NULL) return false;
 
 	CChip *p = GetFirst();
@@ -516,9 +619,9 @@ bool CWaferDataBase::GenerateErrorReport(char filename[])
 	return true;
 }
 
-bool CWaferDataBase::GenerateClassList(char filename[])
+bool CWaferDataBase::GenerateClassList(const std::string &filename)
 {
-	FILE *f = fopen(filename, "wt");
+	FILE *f = fopen(filename.c_str(), "wt");
 	if (f==NULL) return false;
 	CChip *p = GetFirst();
 	while (p)
@@ -532,9 +635,9 @@ bool CWaferDataBase::GenerateClassList(char filename[])
 	return true;
 }
 
-bool CWaferDataBase::GenerateDataTable(char filename[])
+bool CWaferDataBase::GenerateDataTable(const std::string &filename)
 {
-	FILE *f = fopen(filename, "wt");
+	FILE *f = fopen(filename.c_str(), "wt");
 	if (f==NULL) return false;
 
 	fprintf(f, "WAFER     POS  PX PY BIN C GR  IDIG0 IANA0 IDIGI IANAI VDREG VDAC  IANA V24  BLLVL ADSTP  DC DD WB TS DB DP  DPIX ADDR TRIM MASK NSIG NOIS THRO T2F T2P  PCNT PMEAN  PSTD PMCOL PMI PMA   NPH PHFAIL PHOMEAN PHOSTD PHGMEAN PHGSTD  FAIL  FAILSTRING\n");
@@ -596,9 +699,9 @@ bool CWaferDataBase::GenerateDataTable(char filename[])
 /*
    wafer #chips 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23
 */
-bool CWaferDataBase::GenerateStatistics(const char filename[])
+bool CWaferDataBase::GenerateStatistics(const std::string &filename)
 {
-	FILE *f = fopen(filename, "wt");
+	FILE *f = fopen(filename.c_str(), "wt");
 	if (f==NULL) return false;
 
 	CChip *p = GetFirst();
@@ -641,7 +744,7 @@ bool CWaferDataBase::GenerateStatistics(const char filename[])
 #define WMAPOFFSY  0
 
 
-bool CWaferDataBase::GenerateWaferMap(char filename[], unsigned int mode)
+bool CWaferDataBase::GenerateWaferMap(const std::string &filename, unsigned int mode)
 {
 	int bincount;
 	switch (mode)
@@ -660,7 +763,7 @@ bool CWaferDataBase::GenerateWaferMap(char filename[], unsigned int mode)
 	int bin, yield[MAXBINCOUNT];
 	for (bin=0; bin<bincount; bin++) yield[bin] = 0;
 
-	if (!ps.open(filename)) return false;
+	if (!ps.open(filename.c_str())) return false;
 	ps.putTempl("");
 	ps.putTempl("prolog_begin.tmpl");
 	ps.putTempl("wmap.tmpl");
