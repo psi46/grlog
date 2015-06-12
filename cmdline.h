@@ -35,6 +35,8 @@ class CCmdLineParameter
 	std::string path_XML;
 	std::string path_WaferMap;
 	std::string name_WaferMap;
+	std::string path_YieldsFile;
+	std::string name_YieldsFile;
 public:
 	void Help();
 	bool Process(int argc, char* argv[]);
@@ -50,6 +52,7 @@ public:
 	std::string GetPath_JSON() { return path_JSON; }
 	std::string GetPath_XML() { return path_XML; }
 	std::string GetPath_WaferMap() { return path_WaferMap; }
+	std::string GetPath_YieldsFile() { return path_YieldsFile; }
 
 	std::string GetName_Report() { return name_Report; }
 	std::string GetName_ClassList() { return name_ClassList; }
@@ -58,6 +61,7 @@ public:
 	std::string GetName_Pick() { return name_Pick; }
 	std::string GetName_JSON() { return name_JSON; }
 	std::string GetName_WaferMap(const std::string &suffix) { return name_WaferMap + suffix + ".ps"; }
+	std::string GetName_YieldsFile(const std::string &suffix) { return name_YieldsFile + suffix + ".txt"; }
 };
 
 

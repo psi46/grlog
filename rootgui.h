@@ -71,6 +71,7 @@ public:
 	void DoStatistics();
 	void DoGenerateWaferMap();
 	void PrintWaferMap();
+	void DoGenerateYieldsFile();
 	ClassDef(GrLogMainFrame,1)
 };
 

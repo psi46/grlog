@@ -104,6 +104,7 @@ void CCmdLineParameter::GenNamesPSI()
 	path_JSON       = path + "database\\";
 	path_XML        = path;
 	path_WaferMap   = path + "maps\\";
+	path_YieldsFile = path;
 
 	name_Report     = path_Report + logName + "_report.txt";
 	name_ClassList  = path_ClassList + logName + "_classlist.txt";
@@ -112,5 +113,6 @@ void CCmdLineParameter::GenNamesPSI()
 	name_Pick       = path_Pick + logName + "_pick.txt";
 	name_JSON       = path_JSON + logName + "_db.json";
 	name_WaferMap   = path_WaferMap + logName + "_wmap_";
+	name_YieldsFile = path_YieldsFile + "yields_";
 }
 

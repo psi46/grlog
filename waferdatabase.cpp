@@ -619,15 +619,15 @@ bool CWaferDataBase::GenerateErrorReport(const std::string &filename)
 	return true;
 }
 
-bool CWaferDataBase::GenerateClassList(const std::string &filename)
+bool CWaferDataBase::GenerateClassList(const std::string &filename) //fail code added for final stats
 {
 	FILE *f = fopen(filename.c_str(), "wt");
 	if (f==NULL) return false;
 	CChip *p = GetFirst();
 	while (p)
 	{
-  	   fprintf(f,"%i%i%c %i",
-				p->mapY, p->mapX, "CDAB"[p->mapPos], p->chipClass);
+  	   fprintf(f,"%i%i%c %i %i",
+				p->mapY, p->mapX, "CDAB"[p->mapPos], p->chipClass, (int)p->failCode);
 			fputs("\n", f);
 		p = GetNext(p);
 	}
@@ -792,6 +792,9 @@ bool CWaferDataBase::GenerateWaferMap(const std::string &filename, unsigned int 
 		}
 	}
 
+	double totChips = 0.;
+	double CL1Chips = 0.;
+
 	while (p)
 	{
 		switch (mode)
@@ -810,16 +813,29 @@ bool CWaferDataBase::GenerateWaferMap(const std::string &filename, unsigned int 
 	p = GetFirst();
 	while (p)
 	{
-
+		totChips++;
 		switch (mode)
 		{
 			case 1:  bin = CColorScale::GetFailColorId(p->failCode);  break;
 			case 2:  bin = CColorScale::GetClassColorId(p->chipClass-1); break;
 			default: bin = CColorScale::GetBinColorId(p->bin);
 		}
+		if((p->chipClass)== 1) CL1Chips++;
 		ps.printf("[%i %i %i %i]\n",
 		bin, p->mapPos, p->mapX-WMAPOFFSX, p->mapY-WMAPOFFSY);
 		p = GetNext(p);
+	}
+	double Yield = (CL1Chips/totChips)*100;
+	char finalyield [20];
+    sprintf(finalyield,"%.1f %%",Yield);	
+	ps.printf("/Result(%s)def\n",   finalyield);
+	
+	//some shell output:
+	if(mode==2){
+	  std::cout << "Test date: " << startTime.GetXmlDateTime().c_str() << std::endl ;
+	  std::cout << "# Chips: "   << totChips << std::endl ;
+  	  std::cout << "# Chips CL1: " << CL1Chips << std::endl ;
+	  std::cout << "Yield(CL1): " << finalyield << std::endl ;
 	}
 
 	ps.printf("]wafermapPage\nend showpage\n");
@@ -827,3 +843,77 @@ bool CWaferDataBase::GenerateWaferMap(const std::string &filename, unsigned int 
 	return true;
 }
 
+//new - just a first attempt to get yields from all the wafers by reading classlist.dat - to be integrated in the genaral structure
+bool CWaferDataBase::GenerateYieldsFile(const std::string &filename, const std::string &batchname){
+
+    std::string wlistfile = gName.GetPath_YieldsFile() + "waferlist_" + batchname + ".dat";
+	std::cout << wlistfile << std::endl;
+
+	int Fail[24] = {};
+	int Cl[5] = {};
+	int n=1;	
+	std::vector<std::string> waferlist;
+    ifstream infile;
+    infile.open (wlistfile);
+	if (infile == NULL) 
+	{
+		std::cout<< "ERROR: can not open " << wlistfile << std::endl;
+		return false;
+	}
+    while(!infile.eof()) 
+	{
+		std::string wafern;
+        std::getline(infile,wafern);
+		waferlist.push_back(wafern);
+    }
+    infile.close();
+
+	for(int j=0; j< waferlist.size(); j++)
+	{
+	  std::string clistfile = gName.GetPath_YieldsFile().c_str() + waferlist[j] + "_classlist.txt";
+	  ifstream infile;
+	  infile.open(clistfile);
+	  if (infile == NULL) 
+	  {
+	    std::cout << "can not open file " << clistfile;
+	    return false;
+	  }
+      int fail, cl, roc;
+	  cl = fail = 0;
+	  char g;
+      while(!infile.eof())
+	  {
+	    std::string line;
+	    getline(infile,line);
+	    sscanf(line.c_str(),"%i%c %i %i",&roc,&g,&cl,&fail);	  
+	    for(int i=0; i<5; i++) {
+ 		  if(cl == i+1) Cl[i]++;
+	    }  
+	    for(int i=0; i<24; i++) {
+		  if(fail == i) Fail[i]++;
+	    }  
+	    n++;
+      }n--;
+      infile.close();
+    }
+
+    ofstream foutput;
+    foutput.open (filename);  
+	foutput << "Batch: " << batchname << "  totWafers: " << waferlist.size() << "  totROCs: " << n-1 << std::endl << std::endl;
+	foutput << "Fail\t#ROCs\tyield(%)" << std::endl;
+	foutput.precision(2);
+	foutput << std::fixed;
+	for(int i=0; i<24; i++)
+	{
+		double yield = ((double)Fail[i])/(double)(n-1)*100;
+		foutput << i << "\t" << Fail[i] << "\t" << yield  << std::endl;
+	}  
+	foutput << std::endl << "Class\t#ROCs\tyield(%)" << std::endl;
+	for(int i=0; i<5; i++)
+	{
+		double yield = ((double)Cl[i])/(double)(n-1)*100;
+		foutput << i+1 << "\t" << Cl[i] << "\t" << yield << std::endl;
+	}  
+    foutput.close();
+    return true;
+}
