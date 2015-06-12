@@ -832,10 +832,10 @@ bool CWaferDataBase::GenerateWaferMap(const std::string &filename, unsigned int 
 	
 	//some shell output:
 	if(mode==2){
-	  std::cout << "Test date: " << startTime.GetXmlDateTime().c_str() << std::endl ;
+	  std::cout << std::endl << "Test date: " << startTime.GetXmlDateTime().c_str() << std::endl ;
 	  std::cout << "# Chips: "   << totChips << std::endl ;
   	  std::cout << "# Chips CL1: " << CL1Chips << std::endl ;
-	  std::cout << "Yield(CL1): " << finalyield << std::endl ;
+	  std::cout << "Yield(CL1): " << finalyield << std::endl << std::endl ;
 	}
 
 	ps.printf("]wafermapPage\nend showpage\n");
@@ -847,7 +847,6 @@ bool CWaferDataBase::GenerateWaferMap(const std::string &filename, unsigned int 
 bool CWaferDataBase::GenerateYieldsFile(const std::string &filename, const std::string &batchname){
 
     std::string wlistfile = gName.GetPath_YieldsFile() + "waferlist_" + batchname + ".dat";
-	std::cout << wlistfile << std::endl;
 
 	int Fail[24] = {};
 	int Cl[5] = {};
