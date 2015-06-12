@@ -29,6 +29,8 @@ const char* CLogError::ErrorMsg()
 		return "ERROR: incorrect TOKEN section!";
 	case ERROR_I2C:
 		return "ERROR: incorrect I2C section!";
+	case ERROR_READBACK:
+		return "ERROR: incorrect Readback section!";
 	case ERROR_VANA:
 		return "ERROR: incorrect VANA section!";
 	case ERROR_ITRIM:
