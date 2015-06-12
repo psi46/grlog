@@ -712,7 +712,7 @@ bool CWaferDataBase::GenerateStatistics(const std::string &filename)
 	int fail[24] = { 0 };
 	int cl[5] = { 0 };
 
-	fprintf(f,"wafer:  %s\n", waferId);
+	fprintf(f,"wafer:  %s\n", waferId.c_str());
 
 	while (p)
 	{
