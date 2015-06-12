@@ -443,7 +443,7 @@ void GrLogMainFrame::UpdateWmap()
 void GrLogMainFrame::DoGenerateYieldsFile()  //new - just a first attempt to get yields from all the wafers by reading classlist.dat
 {
 	std::string filename;
-	std::string batchname =	"4QESB00000";  //debug
+	std::string batchname =	gName.GetName_Batch();  //debug - main folder has to be named with batch name
 	_mkdir(gName.GetPath_YieldsFile().c_str());
 	filename = gName.GetName_YieldsFile(batchname);
 	if (fDatabase.GenerateYieldsFile(filename, batchname))

@@ -95,6 +95,8 @@ void CCmdLineParameter::GenNamesPSI()
 
 	std::string path = logPath + "report\\";
 	_mkdir(path.c_str());
+	std::string path1 = logPath;
+	path1.erase (path1.end()-1,path1.end()); //to get folder name only
 
 	path_Report     = path;
 	path_ClassList  = path;
@@ -106,6 +108,7 @@ void CCmdLineParameter::GenNamesPSI()
 	path_WaferMap   = path + "maps\\";
 	path_YieldsFile = path;
 
+	name_Batch      = path1;
 	name_Report     = path_Report + logName + "_report.txt";
 	name_ClassList  = path_ClassList + logName + "_classlist.txt";
 	name_FailList   = path_FailList + logName + "_FailList.txt";

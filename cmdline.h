@@ -20,6 +20,7 @@ class CCmdLineParameter
 	void GenerateNames();
 	void GenNamesPSI();
 
+	std::string name_Batch;
 	std::string path_Report;
 	std::string name_Report;
 	std::string path_ClassList;
@@ -43,6 +44,7 @@ public:
 
 	std::string GetName()     { return logName; }
 	std::string GetName_Log() { return logFileName; }
+	std::string GetName_Batch() { return name_Batch; }
 
 	std::string GetPath_Report() { return path_Report; }
 	std::string GetPath_ClassList() { return path_ClassList; }
