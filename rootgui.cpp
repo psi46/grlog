@@ -96,6 +96,9 @@ GrLogMainFrame::GrLogMainFrame(CWaferDataBase &waferData,
 	// --- button "XML files"
 	AddButton(buttonFrame, "&XML Files", "DoGenerateXMLfiles()");
 
+	// --- button "yields file"
+	AddButton(buttonFrame, "&yields file", "DoGenerateYieldsFile()");  //to calculate yield from classlist files (input files needed..)
+
 	// --- button "full report"
 	AddButton(buttonFrame, "&full report", "DoFullReport()");
 
@@ -103,7 +106,7 @@ GrLogMainFrame::GrLogMainFrame(CWaferDataBase &waferData,
 	AddButton(buttonFrame, "&pd report", "DoPDReport()");  //for PD results and internal db
 
 	// --- button "PSI report"
-	AddButton(buttonFrame, "&pd report", "DoPSIReport()");  //for wafer classification
+	AddButton(buttonFrame, "psi report", "DoPSIReport()");  //for wafer classification
 
 	// --- button "wafer map"
 	AddButton(buttonFrame, "&wafer map", "DoGenerateWaferMap()");
@@ -352,7 +355,13 @@ void GrLogMainFrame::DoPDReport() //Padova test report
 	fWmapMode = WMAP_FAILCODE;
 	DoGenerateWaferMap();
 	DoGenerateJSONfile();
-	DoClassList();
+	DoClassList();  //used for final stats calculation
+}
+
+
+void GrLogMainFrame::DoPSIReport() // PSI test report
+{
+
 }
 
 
@@ -437,3 +446,14 @@ void GrLogMainFrame::UpdateWmap()
 	fCanvas->Update();
 }
 
+void GrLogMainFrame::DoGenerateYieldsFile()  //new - just a first attempt to get yields from all the wafers by reading classlist.dat
+{
+	std::string filename;
+	std::string batchname =	gName.GetName_Batch();  //debug - main folder has to be named with batch name
+	_mkdir(gName.GetPath_YieldsFile().c_str());
+	filename = gName.GetName_YieldsFile(batchname);
+	if (fDatabase.GenerateYieldsFile(filename, batchname))
+	printf("Yields file %s created.\n", filename.c_str());
+	else
+		printf("Could not create %s!\n", filename.c_str());
+}

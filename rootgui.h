@@ -67,10 +67,12 @@ public:
 	void DoGenerateJSONfile();
 	void DoGenerateXMLfiles();
 	void DoPDReport();
+	void DoPSIReport();
 	void DoFullReport();
 	void DoStatistics();
 	void DoGenerateWaferMap();
 	void PrintWaferMap();
+	void DoGenerateYieldsFile();
 	ClassDef(GrLogMainFrame,1)
 };
 

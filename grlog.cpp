@@ -48,7 +48,7 @@ int ReadLogFile(const std::string &filename)
 
 int main(int argc, char* argv[])
 {
-	printf("grlog (28.5.2015)\n");
+	printf("grlog (12.6.2015)\n");
 
 	// === Retrieve log file name ==============================================
 

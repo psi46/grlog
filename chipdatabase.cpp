@@ -687,7 +687,7 @@ void CChip::CalculatePhase2()
 //	if (addressStep <  70.0 || 110.0 < addressStep) CHIPFAIL(FAIL3_ASTEP)
 
 	// --- class 2 -------------------------------------------------------
-	chipClass = 2; pickClass = 1; // DEBUG
+	chipClass = 2; pickClass = 2;
 
 	if (nPixDefect>0) { CHIPFAIL(FAIL2_1PM) }
 

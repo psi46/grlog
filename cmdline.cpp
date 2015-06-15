@@ -83,9 +83,40 @@ void CCmdLineParameter::GenerateNames()
 {
 	switch (dataStructure)
 	{
-		case 1: GenNamesPSI(); break;
-		default: GenNamesPSI();
+		case 1: GenNamesPSI(); break; // PSI report directory/naming structure structure
+		default: GenNames();  // rename and create method for default report directory structure
 	}
+}
+
+
+void CCmdLineParameter::GenNames()
+{
+	// --- Data structure (PSI version)
+
+	std::string path = logPath + "report\\";
+	_mkdir(path.c_str());
+	std::string path1 = logPath;
+	path1.erase (path1.end()-1,path1.end()); //to get folder name only
+
+	path_Report     = path;
+	path_ClassList  = path;
+	path_FailList   = path;
+	path_Statistics = path;
+	path_Pick       = path;
+	path_JSON       = path + "database\\";
+	path_XML        = path;
+	path_WaferMap   = path + "maps\\";
+	path_YieldsFile = path;
+
+	name_Batch      = path1;
+	name_Report     = path_Report + logName + "_report.txt";
+	name_ClassList  = path_ClassList + logName + "_classlist.txt";
+	name_FailList   = path_FailList + logName + "_FailList.txt";
+	name_Statistics = path_Statistics + logName + "_stat.txt";
+	name_Pick       = path_Pick + logName + "_pick.txt";
+	name_JSON       = path_JSON + logName + "_db.json";
+	name_WaferMap   = path_WaferMap + logName + "_wmap_";
+	name_YieldsFile = path_YieldsFile + "yields_";
 }
 
 
@@ -95,6 +126,8 @@ void CCmdLineParameter::GenNamesPSI()
 
 	std::string path = logPath + "report\\";
 	_mkdir(path.c_str());
+	std::string path1 = logPath;
+	path1.erase (path1.end()-1,path1.end()); //to get folder name only
 
 	path_Report     = path;
 	path_ClassList  = path;
@@ -105,6 +138,7 @@ void CCmdLineParameter::GenNamesPSI()
 	path_XML        = path;
 	path_WaferMap   = path + "maps\\";
 
+	name_Batch      = path1;
 	name_Report     = path_Report + logName + "_report.txt";
 	name_ClassList  = path_ClassList + logName + "_classlist.txt";
 	name_FailList   = path_FailList + logName + "_FailList.txt";
@@ -112,5 +146,6 @@ void CCmdLineParameter::GenNamesPSI()
 	name_Pick       = path_Pick + logName + "_pick.txt";
 	name_JSON       = path_JSON + logName + "_db.json";
 	name_WaferMap   = path_WaferMap + logName + "_wmap_";
+	name_YieldsFile = path_YieldsFile + "yields_";
 }
 
