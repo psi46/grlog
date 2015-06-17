@@ -410,24 +410,43 @@ void GrLogMainFrame::DoGenerateWaferMap()
 
 void GrLogMainFrame::PrintWaferMap()
 {
-	char *p;
+	std::string filename;
+	_mkdir(gName.GetPath_WaferMap().c_str());
 	switch (fWmapMode)
 	{
-		case WMAP_BIN:      p = "bin";   break;
-		case WMAP_CLASS:    p = "class"; break;
-		case WMAP_FAILCODE: p = "fail";  break;
-		case WMAP_PICGROUP: p = "pic";   break;
-		case WMAP_IDIGON:   p = "idig0"; break;
-		case WMAP_IANAON:   p = "iana0"; break;
-		case WMAP_IDIGINI:  p = "idigi"; break;
-		case WMAP_IANAINI:  p = "ianai"; break;
-		case WMAP_VANA:     p = "vana";  break;
-		case WMAP_PC_VDREG: p = "vdreg"; break;
+		case WMAP_BIN:
+			filename = gName.GetName_WaferMap("bin_printed"); break;    //to distinguish from 'official' wafer map
+		case WMAP_FAILCODE:
+			filename = gName.GetName_WaferMap("fail_printed"); break;   //to distinguish from 'official' wafer map
+		case WMAP_CLASS:
+			filename = gName.GetName_WaferMap("class_printed"); break;  //to distinguish from 'official' wafer map
+		case WMAP_PICGROUP:
+			filename = gName.GetName_WaferMap("pic"); break;
+		case WMAP_IDIGON:
+			filename = gName.GetName_WaferMap("idigOn"); break;
+		case WMAP_IANAON:
+			filename = gName.GetName_WaferMap("ianaOn"); break;
+		case WMAP_IDIGINI:
+			filename = gName.GetName_WaferMap("idigIn"); break;
+		case WMAP_IANAINI:
+			filename = gName.GetName_WaferMap("ianaIn"); break;
+		case WMAP_VANA:
+			filename = gName.GetName_WaferMap("va24"); break;
+		case WMAP_PC_VDREG:
+			filename = gName.GetName_WaferMap("vdreg"); break;
+		case WMAP_CALDEL:
+			filename = gName.GetName_WaferMap("caldel"); break;
+		case WMAP_PM:
+			filename = gName.GetName_WaferMap("pm"); break;
+		case WMAP_PH1MEAN:
+			filename = gName.GetName_WaferMap("ph1mean"); break;
+		case WMAP_PH21MEAN:
+			filename = gName.GetName_WaferMap("ph21mean"); break;
 		default: return;
 	}
 
 	TCanvas *fCanvas = fEcanvas->GetCanvas();
-	fCanvas->Print(gName.GetName().c_str());
+	fCanvas->Print(filename.c_str());
 }
 
 

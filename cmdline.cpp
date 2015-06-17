@@ -96,7 +96,7 @@ void CCmdLineParameter::GenNames()
 	std::string path = logPath + "report\\";
 	_mkdir(path.c_str());
 	std::string path1 = logPath;
-	path1.erase (path1.end()-1,path1.end()); //to get folder name only
+	if (path1.size()!=0) path1.erase(path1.end()-1,path1.end()); //to get folder name only
 
 	path_Report     = path;
 	path_ClassList  = path;
@@ -127,7 +127,7 @@ void CCmdLineParameter::GenNamesPSI()
 	std::string path = logPath + "report\\";
 	_mkdir(path.c_str());
 	std::string path1 = logPath;
-	path1.erase (path1.end()-1,path1.end()); //to get folder name only
+	if (path1.size()!=0) path1.erase(path1.end()-1,path1.end()); //to get folder name only
 
 	path_Report     = path;
 	path_ClassList  = path;
