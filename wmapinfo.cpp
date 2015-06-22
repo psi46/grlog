@@ -296,6 +296,20 @@ void CWmapInfo::UpdatePm(CWaferDataBase &database)
 	fDraw = NULL;
 }
 
+void CWmapInfo::UpdatePmColDiff(CWaferDataBase &database)
+{
+	Reset();
+	fHist = new TH1F("hist","Threshold diff between cols", 10, 0, 10);
+
+	CChip *p = database.GetFirst();
+	while(p)
+	{
+		if (p->n) fHist->Fill(p->pm_col_max);
+		p = database.GetNext(p);
+	}
+	fDraw = NULL;
+}
+
 void CWmapInfo::UpdatePh1mean(CWaferDataBase &database)
 {
 	Reset();

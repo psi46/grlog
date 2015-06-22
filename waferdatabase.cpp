@@ -258,6 +258,7 @@ void CWaferDataBase::Clear()
 	waferId    = "";
 	waferNr    = "";
 	startTime.SetDateTime(1900,1,1, 0,0,0);
+	ICount = 0;
 }
 
 
@@ -317,6 +318,27 @@ void CWaferDataBase::CalculatePhase1Unsorted()
 void CWaferDataBase::CalculatePhase1()
 {  // chips are sorted
 
+	// --- calculate IdigInit and IanaInit mean values over bin 10 chips or better
+	ICount = 0;
+	IdigInitMean = 0.0;
+	IanaInitMean = 0.0;
+
+	CChip *p = GetFirst();
+	while (p)
+	{
+		if (p->existINIT && (p->bin == 0 || p->bin >= 10))
+		{
+			ICount++;
+			IdigInitMean += p->IdigInit;
+			IanaInitMean += p->IanaInit;
+		}
+		p = GetNext(p);
+	}
+	if (ICount)
+	{
+		IdigInitMean /= ICount;
+		IanaInitMean /= ICount;
+	}
 }
 
 

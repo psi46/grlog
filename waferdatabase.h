@@ -85,6 +85,10 @@ public:
 // === calculated values (phase 1) ==========================================
 	Cdtime startTime;
 
+	int ICount;
+	double IdigInitMean;
+	double IanaInitMean;
+
 // === calculated values (phase 2) ==========================================
 
 

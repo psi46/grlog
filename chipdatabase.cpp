@@ -677,8 +677,7 @@ void CChip::CalculatePhase2()
 
 	if (pm    < 85.0 || 125.0 < pm)    CHIPFAIL(FAIL3_TMEAN)
 	if (pstd  <  0.5 ||  8.0  < pstd)  CHIPFAIL(FAIL3_TSTD)
-//	if (pdiff <  5   || 30    < pdiff) CHIPFAIL(FAIL3_TDIFF)
-//	if (pm_col_max > 2.5)             CHIPFAIL(FAIL3_TCOL)
+	if (pm_col_max > 5.0)              CHIPFAIL(FAIL3_TCOL)
 
 //	if (ph1mean  < -200.0 || 150.0 < ph1mean)  CHIPFAIL(FAIL3_PHOFFS)
 //	if (ph1std   >   25)                       CHIPFAIL(FAIL3_PHOFFS)
@@ -686,6 +685,10 @@ void CChip::CalculatePhase2()
 //	if (ph21std  >   20)                       CHIPFAIL(FAIL3_PHGAIN)
 
 //	if (addressStep <  70.0 || 110.0 < addressStep) CHIPFAIL(FAIL3_ASTEP)
+
+	if (fabs(IdigInit - wafer->IdigInitMean) > 4.0) CHIPFAIL(FAIL3_IDCURRENT)
+	if (fabs(IanaInit - wafer->IanaInitMean) > 5.0) CHIPFAIL(FAIL3_IACURRENT)
+
 
 	// --- class 2 -------------------------------------------------------
 	chipClass = 2; pickClass = 2;

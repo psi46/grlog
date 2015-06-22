@@ -36,7 +36,7 @@ void CColorScale::InstallColor(int colNum, float red, float green, float blue)
 	{
 		TColor *color = new TColor(colNum, red, green, blue,"");
 	}
-	else 
+	else
 	{
 		TColor *color = gROOT->GetColor(colNum);
 		color->SetRGB(red, green, blue);
@@ -61,24 +61,24 @@ const CColor CColorScale::COLOR_TABLE[SIZE_OF_COLORTABLE] =
 {
 	{ 0.0, 0.0, 0.0 },  //  0 black
 	{ 0.5, 0.5, 0.5 },  //  1 dark gray
-	{ .75, 1.0, .25 },  //  2 light gray
+	{ 1.0, .76, .76 },  //  2
 	{ 1.0, 1.0, 1.0 },  //  3 white
 
 	{ 0.7, 0.0, 0.0 },  //  4 dark red
 	{ 1.0, 0.0, 0.0 },  //  5 red
-	{ 1.0, 0.0, 0.4 },  //  6 light red  //0.4
+	{ .06, 1.0, .81 },  //  6 light red  //0.4
 
 	{ 0.0, 0.3, 0.0 },  //  7 dark green
 	{ 0.0, .75, 0.0 },  //  8 green
 	{ 0.0, 1.0, 0.0 },  //  9 green
-	{ .75, 1.0, 0.0 },  // 10 yellow green
-	{ 0.7, 1.0, 0.7 },  // 11 light green
+	{ 0.0, .79, .64 },  // 10 yellow green
+	{ 1.0, .84, 0.0 },  // 11 gold
 
 	{ 0.0, 0.5, 0.5 },  // 12 dark blue green
 
 	{ 0.0, 0.0, 1.0 },  // 13 dark blue
 	{ .25, 0.5, 1.0 },  // 14 blue
-	{ 0.0, .75, 1.0 },  // 15 blue
+	{ 1.0, .54, .54 },  // 15
 	{ 0.5, .75, 1.0 },  // 16 blue
 	{ 0.0, 1.0, 1.0 },  // 17 light blue
 	{ 0.5, 1.0, 1.0 },  // 18 light blue
@@ -88,7 +88,7 @@ const CColor CColorScale::COLOR_TABLE[SIZE_OF_COLORTABLE] =
 	{ 1.0, 0.5, 0.25 },  // 21
 	{ 1.0, 0.5, 0.0 },  // 22 light yellow
 	{ 1.0, 1.0, 0.0 },  // 23 yellow
-	{ 1.0, 1.0, 0.85 },  // 24 light yellow
+	{ 1.0, 1.0, .85 },  // 24 light yellow
 
 	{ 0.5, 0.0, 0.5 },  // 25 dark red blue
 	{ 1.0, 0.0, 1.0 },  // 26 red blue
@@ -123,7 +123,7 @@ const Int_t CColorScale::colorFail[nColorFail] =
 	 0,  // fail  2
 	 1,  // fail  3
 	24,  // fail  4
-	 1,  // fail  5 ?
+	 3,  // fail  5 ?
 	23,  // fail  6
 	22,  // fail  7
 	17,  // fail  8
@@ -132,14 +132,14 @@ const Int_t CColorScale::colorFail[nColorFail] =
 	19,  // fail 11
 	20,  // fail 12
 	25,  // fail 13
-	 1,  // fail 14 ?
-	 1,  // fail 15 ?
-	 1,	 // fail 16 ?
-	 1,  // fail 17 ?
-	 1,  // fail 18 ?
-	 1,  // fail 19 ?
-	 1,  // fail 20 ?
-	 1,  // fail 21 ?
+	15,  // fail 14
+	 2,  // fail 15
+	11,	 // fail 16
+	 3,  // fail 17 ?
+	10,  // fail 18
+	 6,  // fail 19
+	16,  // fail 20
+	14,  // fail 21
 	13,  // fail 22
 	 8   // fail 23
 };

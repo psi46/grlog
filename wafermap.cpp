@@ -345,6 +345,21 @@ void CWaferMap::UpdatePm(CWaferDataBase &database)
 }
 
 
+void CWaferMap::UpdatePmColDiff(CWaferDataBase &database)
+{
+	Clear();
+	scale->SetRange(0.0, 10.0);
+	CChip *p = database.GetFirst();
+	while (p)
+	{
+		CWaferPos pos(p->mapX,p->mapY,p->mapPos);
+		Float_t value = p->pm_col_max;
+		if (pos.Exist() && p->nPh) Add(p,pos,value);
+		p = database.GetNext(p);
+	}
+}
+
+
 void CWaferMap::UpdatePh1mean(CWaferDataBase &database)
 {
 	Clear();

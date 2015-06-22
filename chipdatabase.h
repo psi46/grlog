@@ -41,8 +41,8 @@ public:
 		FAIL3_TCOL   = 17,	// 
 		FAIL3_PHOFFS = 18,	// Pulse height offset
 		FAIL3_PHGAIN = 19,	// Pulse height gain
-		FAIL3_ASTEP  = 20,	// (only for analog ROC)
-		FAIL3_BL     = 21,	// (only for analog ROC)
+		FAIL3_IDCURRENT = 20, // VD current limits
+		FAIL3_IACURRENT = 21, // VA current limits
 		FAIL2_1PM    = 22,	// 1..4 pixel defect
 		FAIL_NOFAIL  = 23,	// No error
 		FAIL_UNDEF   = 24,	// Undefined error
@@ -147,10 +147,10 @@ public:
 //  pixel shreshold statistics
 	int n;              // number of pixels in statistic
 	double pm;          // mean
-	double pm_col_max;  // difference between adjacent dcols
+	double pm_col_max; // difference between adjacent cols
 	double pstd;        // std dev
 	int pmin;           // min
-	int pmax;           // max difference between adjacent dcols
+	int pmax;           // max
 
 // pixel pulse height statistics
 	int nPh;            // number if pixels in statistic
