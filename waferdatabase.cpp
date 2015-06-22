@@ -268,7 +268,7 @@ void CWaferDataBase::Calculate()
 {
 	CChip *p;
 
-	// Calculate chip phase 1
+	// Calculate chip phase 1 results (no wafer results available)
 	p = GetFirstM();
 	while (p)
 	{
@@ -276,14 +276,21 @@ void CWaferDataBase::Calculate()
 		p = GetNextM(p);
 	}
 
+	// Calculate wafer results (chip phase 1 results available)
+	// Chips in test succession
 	CalculatePhase1Unsorted();
+
+	// Sort chips from top to bottom, left to right, first test first
 	SortPicOrder();
+
+	// find and mark multiple tests of the same chip
 	CalcMulti();
 
-	// Calculate wafer phase 1 (with chip phase 1 data available)
+	// Calculate wafer results (chip phase 1 results available)
+	// Chips are sorted
 	CalculatePhase1();
 
-	// Calculate chip phase 2 (with wafer phase 1 data available)
+	// Calculate chip phase 2 results (with wafer phase 1 data available)
 	p = GetFirstM();
 	while (p)
 	{
@@ -292,23 +299,23 @@ void CWaferDataBase::Calculate()
 		p = GetNextM(p);
 	}
 
-	// Calculate wafer phase 2 (including chip phase 2 data)
+	// Calculate wafer phase 2 data (including chip phase 2 data)
 	CalculatePhase2();
 	SetPicGroups();
 }
 
 
 void CWaferDataBase::CalculatePhase1Unsorted()
-{
-// chips are in test order
+{ // Chips in test succession
+
+	// get wafer test start date/time
 	CChip *p = GetFirstM();
 	if (p) startTime = p->startTime;
 }
 
 
 void CWaferDataBase::CalculatePhase1()
-{
-	// chips are sorted
+{  // chips are sorted
 
 }
 
@@ -916,4 +923,11 @@ bool CWaferDataBase::GenerateYieldsFile(const std::string &filename, const std::
 	}  
     foutput.close();
     return true;
+}
+
+
+bool CWaferDataBase::GenerateReportPSI(const std::string &filename)
+{
+
+	return true;
 }

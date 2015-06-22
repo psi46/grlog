@@ -96,7 +96,7 @@ void CCmdLineParameter::GenNames()
 	std::string path = logPath + "report\\";
 	_mkdir(path.c_str());
 	std::string path1 = logPath;
-	path1.erase (path1.end()-1,path1.end()); //to get folder name only
+	if (path1.size()!=0) path1.erase(path1.end()-1,path1.end()); //to get folder name only
 
 	path_Report     = path;
 	path_ClassList  = path;
@@ -107,6 +107,7 @@ void CCmdLineParameter::GenNames()
 	path_XML        = path;
 	path_WaferMap   = path + "maps\\";
 	path_YieldsFile = path;
+	path_ChipView   = path + "chips\\";
 
 	name_Batch      = path1;
 	name_Report     = path_Report + logName + "_report.txt";
@@ -117,6 +118,7 @@ void CCmdLineParameter::GenNames()
 	name_JSON       = path_JSON + logName + "_db.json";
 	name_WaferMap   = path_WaferMap + logName + "_wmap_";
 	name_YieldsFile = path_YieldsFile + "yields_";
+	name_ChipView   = path_ChipView + logName;
 }
 
 
@@ -127,7 +129,7 @@ void CCmdLineParameter::GenNamesPSI()
 	std::string path = logPath + "report\\";
 	_mkdir(path.c_str());
 	std::string path1 = logPath;
-	path1.erase (path1.end()-1,path1.end()); //to get folder name only
+	if (path1.size()!=0) path1.erase(path1.end()-1,path1.end()); //to get folder name only
 
 	path_Report     = path;
 	path_ClassList  = path;
@@ -137,6 +139,7 @@ void CCmdLineParameter::GenNamesPSI()
 	path_JSON       = path + "database\\";
 	path_XML        = path;
 	path_WaferMap   = path + "maps\\";
+	path_ChipView   = path + "chips\\";
 
 	name_Batch      = path1;
 	name_Report     = path_Report + logName + "_report.txt";
@@ -147,5 +150,6 @@ void CCmdLineParameter::GenNamesPSI()
 	name_JSON       = path_JSON + logName + "_db.json";
 	name_WaferMap   = path_WaferMap + logName + "_wmap_";
 	name_YieldsFile = path_YieldsFile + "yields_";
+	name_ChipView   = path_ChipView + logName + "_ROC";
 }
 

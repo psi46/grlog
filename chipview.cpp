@@ -301,24 +301,30 @@ void CChipView::DoGoNextGoodChip()
 
 void CChipView::PrintChipView()
 {
-	char *p;
-	char t[12];
-
+	std::string filename;
+	_mkdir(gName.GetPath_ChipView().c_str());
+	
+	char cc[10];
+	sprintf(cc,"_%i%i%c", fChip->mapY, fChip->mapX, "CDAB"[fChip->mapPos]);
+	std::string str = cc;
 	switch (fViewMode)
 	{
-		case CHVIEW_PIXDEF: p = "def";   break;
-		case CHVIEW_VTHR:   p = "vthr";  break;
-		case CHVIEW_TRIM0:  p = "trim0"; break;
-		case CHVIEW_TRIM1:  p = "trim1"; break;
-		case CHVIEW_TRIM2:  p = "trim2"; break;
-		case CHVIEW_TRIM3:  p = "trim3"; break;
-		case CHVIEW_PULSE:  p = "vthr";  break;
+		case CHVIEW_PIXDEF: str = str + "_def";   break;
+		case CHVIEW_VTHR:   str = str + "_vthr";  break;
+		case CHVIEW_TRIM0:  str = str + "_trim0"; break;
+		case CHVIEW_TRIM1:  str = str + "_trim1"; break;
+		case CHVIEW_TRIM2:  str = str + "_trim2"; break;
+		case CHVIEW_TRIM3:  str = str + "_trim3"; break;
+		case CHVIEW_PULSE:  str = str + "_pulse";  break;
+		case CHVIEW_PH1:  str = str + "_ph1";  break;
+		case CHVIEW_PH2:  str = str + "_ph2";  break;
+		case CHVIEW_PH2_PH1:  str = str + "_ph2ph1";  break;
 		default: return;
 	}
-	sprintf(t, "%i%i%c_%s", fChip->mapY, fChip->mapX, "CDAB"[fChip->mapPos],
-		p);
+
+	filename = gName.GetName_ChipView(str);
 	TCanvas *fCanvas = fEcanvas->GetCanvas();
-	fCanvas->Print(gName.GetName().c_str());
+	fCanvas->Print(filename.c_str());
 }
 
 

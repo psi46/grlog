@@ -68,6 +68,7 @@ public:
 	bool GenerateStatistics(const std::string &filename);
 	bool GenerateWaferMap(const std::string &filename, unsigned int mode);
 	bool GenerateYieldsFile(const std::string &filename, const std::string &batchname);
+	bool GenerateReportPSI(const std::string &filename);
 
 	void Clear();
 	void Calculate();

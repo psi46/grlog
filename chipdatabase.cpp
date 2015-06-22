@@ -504,6 +504,8 @@ void CChip::CalculatePhase1()
 	pixmap.SetDefectTrimBit(0, 1, 2, false);
 	pixmap.SetDefectTrimBit(0, 1, 3, false);
 
+	// --- count pixel defects
+	// --- calculate threshold (mean, std, max col to col difference)
 	n    = 0;
 	pm   = 0.0;
 	pm_col_max = 0.0;
@@ -568,23 +570,22 @@ void CChip::CalculatePhase1()
 			{
 				double pm_col_diff = fabs(pm_col[col] - pm_col[col-1]);
 				if ((col==1) || (col==51)) pm_col_diff /= 3.0;
-				if (pm_col_diff > pm_col_max) pm_col_max = pm_col_diff; 
+				if (pm_col_diff > pm_col_max) pm_col_max = pm_col_diff;
 			}
 
+/*
 #define PMAX 15
-/*		for (col=0; col<52; col++) for (row=0; row<80; row++)
+		for (col=0; col<52; col++) for (row=0; row<80; row++)
 		{
 			int y = pixmap.GetRefLevel(col,row);
-			if (y == 100) nPixThrOr++;
+			if (y >= 255) nPixThrOr++;
 			else if (y < (pm-PMAX) || (pm+PMAX) < y) nPixThrOr++;
 		}
 */
-	}
+	} // if (n>0)
 
-//	nColDefect = 0;
-//	for (col=0; col<26; col++) if (dcol.get(col)) nColDefect++;
 
-	// pulse height
+	// --- pulse height
 #define PH1TOL   90
 #define PH21TOL  60
 	nPh = 0;
@@ -674,9 +675,9 @@ void CChip::CalculatePhase2()
 //  not used criteria (results are not in the log files):
 //	int pdiff = pmax-pmin;
 
-//	if (pm    < 30.0 || 82.0 < pm)    CHIPFAIL(FAIL3_TMEAN)
-//	if (pstd  <  0.5 ||  4.0 < pstd)  CHIPFAIL(FAIL3_TSTD)
-//	if (pdiff <  5   || 30   < pdiff) CHIPFAIL(FAIL3_TDIFF)
+	if (pm    < 85.0 || 125.0 < pm)    CHIPFAIL(FAIL3_TMEAN)
+	if (pstd  <  0.5 ||  8.0  < pstd)  CHIPFAIL(FAIL3_TSTD)
+//	if (pdiff <  5   || 30    < pdiff) CHIPFAIL(FAIL3_TDIFF)
 //	if (pm_col_max > 2.5)             CHIPFAIL(FAIL3_TCOL)
 
 //	if (ph1mean  < -200.0 || 150.0 < ph1mean)  CHIPFAIL(FAIL3_PHOFFS)
