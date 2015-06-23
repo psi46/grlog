@@ -337,3 +337,17 @@ void CWmapInfo::UpdatePh21mean(CWaferDataBase &database)
 	}
 	fDraw = NULL;
 }
+
+void CWmapInfo::UpdatePhColDiff(CWaferDataBase &database)
+{
+	Reset();
+	fHist = new TH1F("hist","PhColDiff",15, 0, 15);
+
+	CChip *p = database.GetFirst();
+	while(p)
+	{
+		if (p->nPh) fHist->Fill(p->ph_col_max);
+		p = database.GetNext(p);
+	}
+	fDraw = NULL;
+}

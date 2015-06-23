@@ -341,7 +341,12 @@ void CChip::ReadREADBACK(CScanner &Log)
 {
 	float prev;
 	Log.getNextLine();
-	if (sscanf(Log.getNextLine(),"Vdig_u %i %f %f", &vdig_u_adc, &prev, &vdig_u_value) != 3)
+	Log.getNextLine();
+
+	// --- empty log section
+	if (strlen(Log.getLine()) < 6) { Log.getNextSection(); return; }
+
+	if (sscanf(Log.getLine(),"Vdig_u %i %f %f", &vdig_u_adc, &prev, &vdig_u_value) != 3)
 		ERROR_ABORT(ERROR_READBACK);
 	if (sscanf(Log.getNextLine(),"Vana_u %i %f %f", &vana_u_adc, &prev,&vana_u_value) != 3)
 		ERROR_ABORT(ERROR_READBACK);
@@ -504,7 +509,6 @@ void CChip::CalculatePhase1()
 	pixmap.SetDefectTrimBit(0, 1, 2, false);
 	pixmap.SetDefectTrimBit(0, 1, 3, false);
 
-	// --- count pixel defects
 	// --- calculate threshold (mean, std, max col to col difference)
 	n    = 0;
 	pm   = 0.0;
@@ -572,23 +576,18 @@ void CChip::CalculatePhase1()
 				if ((col==1) || (col==51)) pm_col_diff /= 3.0;
 				if (pm_col_diff > pm_col_max) pm_col_max = pm_col_diff;
 			}
-
-/*
-#define PMAX 15
-		for (col=0; col<52; col++) for (row=0; row<80; row++)
-		{
-			int y = pixmap.GetRefLevel(col,row);
-			if (y >= 255) nPixThrOr++;
-			else if (y < (pm-PMAX) || (pm+PMAX) < y) nPixThrOr++;
-		}
-*/
 	} // if (n>0)
 
 
-	// --- pulse height
+	// --- calculate pulse height (mean, std, max col to col difference)
 #define PH1TOL   90
 #define PH21TOL  60
-	nPh = 0;
+	nPh      = 0;
+	ph1mean  = 0.0;
+	ph21mean = 0.0;
+	ph1std   = 0.0;
+	ph21std  = 0.0;
+	ph_col_max = 0.0;
 	nPhFail = 0;
 	int sum1=0, sum1_2=0, sum21 = 0, sum21_2=0;
 	if (pixmap.pulseHeight1Exist && pixmap.pulseHeight2Exist)
@@ -597,30 +596,33 @@ void CChip::CalculatePhase1()
 		{
 			int ph1 = pixmap.GetPulseHeight1(col,row);
 			int ph2 = pixmap.GetPulseHeight2(col,row);
-			if (ph1<10000 && ph2<10000)
+			if (ph1<10000 && ph2<10000) // value exists
 			{
 				nPh++;
 				sum1    += ph1;
 				sum1_2  += ph1*ph1;
-				sum21   += ph2-ph1;
-				sum21_2 += (ph2-ph1)*(ph2-ph1);
+				int phgain = ph2-ph1;
+				sum21   += phgain;
+				sum21_2 += phgain*phgain;
 			}
 		}
 		if (nPh>0)
-		ph1mean  = double(sum1)/nPh;
-		ph21mean = double(sum21)/nPh;
-		ph1std  = sqrt(double(sum1_2)/nPh  - ph1mean*ph1mean);
-		ph21std = sqrt(double(sum21_2)/nPh - ph21mean*ph21mean);
+		{
+			ph1mean  = double(sum1)/nPh;
+			ph21mean = double(sum21)/nPh;
+			ph1std  = sqrt(double(sum1_2)/nPh  - ph1mean*ph1mean);
+			ph21std = sqrt(double(sum21_2)/nPh - ph21mean*ph21mean);
+		}
 
 		for (col=0; col<52; col++) for (row=0; row<80; row++)
 		{
 			int ph1 = pixmap.GetPulseHeight1(col,row);
 			int ph2 = pixmap.GetPulseHeight2(col,row);
-			if (ph1<10000 && ph2<10000)
+			if (ph1<10000 && ph2<10000) // value exists
 			{
-				int phdiff = ph2-ph1;
+				int phgain = ph2-ph1;
 				if (ph1<(ph1mean-PH1TOL) || ph1>(ph1mean+PH1TOL) ||
-				    phdiff<(ph21mean-PH21TOL) || phdiff>(ph21mean+PH21TOL))
+				    phgain<(ph21mean-PH21TOL) || phgain>(ph21mean+PH21TOL))
 					nPhFail++;
 			}
 		}
@@ -628,6 +630,36 @@ void CChip::CalculatePhase1()
 
 	if (nPixThrOr > nPixDefect) nPixDefect = nPixThrOr;
 	if (nPhFail   > nPixDefect) nPixDefect = nPhFail;
+
+	if (nPh>0)
+	{
+		int n_col;
+		double ph_col[52];
+		for (col=0; col<52; col++)
+		{
+			n_col = 0;
+			ph_col[col] = 0.0;
+			int pcolsum = 0;
+			for (row=0; row<80; row++) if (!pixmap.IsDefect(col,row))
+			{
+				int ph1 = pixmap.GetPulseHeight1(col,row);
+				int ph2 = pixmap.GetPulseHeight2(col,row);
+				if (ph1<10000 && ph2<10000) // value exists
+				{
+					n_col++;
+					pcolsum += ph2-ph1;
+				}
+			}
+			if (n_col>0) ph_col[col] = (double)pcolsum/n_col; else break;
+		}
+		if (n_col>0)
+			for (col=1; col<52; col++)
+			{
+				double ph_col_diff = fabs(ph_col[col] - ph_col[col-1]);
+				if ((col==1) || (col==51)) ph_col_diff /= 3.0;
+				if (ph_col_diff > ph_col_max) ph_col_max = ph_col_diff;
+			}
+	}
 }
 
 
@@ -677,14 +709,14 @@ void CChip::CalculatePhase2()
 
 	if (pm    < 85.0 || 125.0 < pm)    CHIPFAIL(FAIL3_TMEAN)
 	if (pstd  <  0.5 ||  8.0  < pstd)  CHIPFAIL(FAIL3_TSTD)
-	if (pm_col_max > 5.0)              CHIPFAIL(FAIL3_TCOL)
+	if (pm_col_max > 5.0)              CHIPFAIL(FAIL3_TDIFF)
 
-//	if (ph1mean  < -200.0 || 150.0 < ph1mean)  CHIPFAIL(FAIL3_PHOFFS)
-//	if (ph1std   >   25)                       CHIPFAIL(FAIL3_PHOFFS)
-//	if (ph21mean <  100.0 || 300.0 < ph21mean) CHIPFAIL(FAIL3_PHGAIN)
-//	if (ph21std  >   20)                       CHIPFAIL(FAIL3_PHGAIN)
 
-//	if (addressStep <  70.0 || 110.0 < addressStep) CHIPFAIL(FAIL3_ASTEP)
+	if (ph1mean  <  20.0 || 140.0 < ph1mean) CHIPFAIL(FAIL3_PHOFFS)
+	if (ph1std   >  12.0)                    CHIPFAIL(FAIL3_PHOFFS)
+	if (ph21mean <  30.0 || 60.0 < ph21mean) CHIPFAIL(FAIL3_PHGAIN)
+	if (ph21std  >   4.0)                    CHIPFAIL(FAIL3_PHGAIN)
+	if (ph_col_max > 6.0)                    CHIPFAIL(FAIL3_PHDIFF)
 
 	if (fabs(IdigInit - wafer->IdigInitMean) > 4.0) CHIPFAIL(FAIL3_IDCURRENT)
 	if (fabs(IanaInit - wafer->IanaInitMean) > 5.0) CHIPFAIL(FAIL3_IACURRENT)
@@ -770,32 +802,37 @@ void CChip::GetFailString()
 		sprintf(s,"%i pixel defect (<=1%%)", nPixDefect);
 		failstring = s; break;
 
-	/*case FAIL3_TMEAN:
-		sprintf(failstring,"Thrshold(mean) = %0.1f (30...80)", pm); break;
+	case FAIL3_TMEAN:
+		sprintf(s,"Thrshold(mean) = %0.1f (30...80)", pm);
+		failstring = s; break;
 
 	case FAIL3_TSTD:
-		sprintf(failstring,"Threshold(rms) = %0.2f (0.5...4.0)", pstd); break;
+		sprintf(s,"Threshold(rms) = %0.2f (0.5...4.0)", pstd);
+		failstring = s; break;
 
 	case FAIL3_TDIFF:
-		sprintf(failstring,"Threshold(max-min) = %i (5...30)", pmax-pmin); break;
-
-	case FAIL3_TCOL:
-		sprintf(failstring,"Threshold Col-Col = %0.2f (<2.5)", pm_col_max);
-		break;
+		sprintf(s,"Threshold(max-min) = %i (5...30)", pmax-pmin);
+		failstring = s; break;
 
 	case FAIL3_PHOFFS:
-		sprintf(failstring,"Pulse height offset = %0.1f(+/-%0.1f)\n",
-			ph1mean, ph1std);
-		break;
+		sprintf(s,"Pulse height offset = %0.1f(+/-%0.1f)\n", ph1mean, ph1std);
+		failstring = s; break;
 
 	case FAIL3_PHGAIN:
-		sprintf(failstring,"Pulse height gain = %0.1f(+/-%0.1f)\n",
-			ph21mean, ph21std);
-		break;
+		sprintf(s,"Pulse height gain = %0.1f(+/-%0.1f)\n", ph21mean, ph21std);
+		failstring = s; break;
 
-	case FAIL3_ASTEP:
-		sprintf(failstring,"addr step = %0.1f (70...100)", addressStep); break;
-	*/
+	case FAIL3_PHDIFF:
+		sprintf(s,"Pulse height gain diff = %0.1f\n", ph_col_max);
+		failstring = s; break;
+
+	case FAIL3_IDCURRENT:
+		sprintf(s,"IdigInit = %0.1f mA (ID(wafer mean)+/-4 mA)", IdigInit);
+		failstring = s; break;
+
+	case FAIL3_IACURRENT:
+		sprintf(s,"IanaInit = %0.1f mA (IA(wafer mean)+/-5 mA)", IanaInit);
+		failstring = s; break;
 
 	// --- class 2 -------------------------------------------------------
 	case FAIL2_1PM:

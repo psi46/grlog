@@ -66,7 +66,8 @@ GrLogMainFrame::GrLogMainFrame(CWaferDataBase &waferData,
 	rb->Connect("Clicked()", "GrLogMainFrame", this, "DoSetMapMode()");
 	rb = new TGRadioButton(selWmap, new TGHotString("Ph21mean"), WMAP_PH21MEAN);
 	rb->Connect("Clicked()", "GrLogMainFrame", this, "DoSetMapMode()");
-
+	rb = new TGRadioButton(selWmap, new TGHotString("PhColDiff"), WMAP_PHCOLDIFF);
+	rb->Connect("Clicked()", "GrLogMainFrame", this, "DoSetMapMode()");
 
 	db->SetState(kButtonDown);
 //	rb->Connect("Pressed()","GrLogMainFrame",this,"SetMapMode(=20)");
@@ -261,6 +262,10 @@ void GrLogMainFrame::SetMapMode(int mode)
 		case WMAP_PH21MEAN:
 			fWmapInfo.UpdatePh21mean(fDatabase);
 			fWmap.UpdatePh21mean(fDatabase);
+			break;
+		case WMAP_PHCOLDIFF:
+			fWmapInfo.UpdatePhColDiff(fDatabase);
+			fWmap.UpdatePhColDiff(fDatabase);
 			break;
 	}
 	UpdateWmap();

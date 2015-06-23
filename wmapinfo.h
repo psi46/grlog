@@ -42,6 +42,7 @@ public:
 	void UpdatePmColDiff(CWaferDataBase &database);
 	void UpdatePh1mean(CWaferDataBase &database);
 	void UpdatePh21mean(CWaferDataBase &database);
+	void UpdatePhColDiff(CWaferDataBase &database);
 };
 
 

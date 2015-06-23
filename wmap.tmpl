@@ -27,40 +27,38 @@
 
 /colorBinTable
 [
-[0.0 0.0 0.0] %  0 black
-[0.5 0.5 0.5] %  1 dark gray
-[1.0 .76 .76] %  2 light gray
-[1.0 1.0 1.0] %  3 white
-
-[0.7 0.0 0.0] %  4 dark red
-[1.0 0.0 0.0] %  5 red
-[.06 1.0 .82] %  6 light red
-
-[0.0 0.3 0.0] %  7 dark green
-[0.0 .75 0.0] %  8 green
-[0.0 1.0 0.0] %  9 green
-[0.0 .79 .64] % 10 yellow green
-[1.0 .84 0.0] % 11 light green
-
-[0.0 0.5 0.5] % 12 dark blue green
-
-[0.0 0.0 1.0] % 13 dark blue
-[.25 0.5 1.0] % 14 blue
-[1.0 .54 .54] % 15 blue
-[0.5 .75 1.0] % 16 blue
-[0.0 1.0 1.0] % 17 light blue
-[0.5 1.0 1.0] % 18 light blue
-
-[0.5 .25 0.0] % 19 dark brown
-[.75 0.5 0.0] % 20 brown
-[1.0 0.5 0.25] % 21
-[1.0 0.5 0.0] % 22 orange
-[1.0 1.0 0.0] % 23 yellow
-[1.0 1.0 0.85] % 24 light yellow
-
-[0.5 0.0 0.5] % 25 dark red blue
-[1.0 0.0 1.0] % 26 red blue
-[1.0 0.5 1.0] % 27 light red blue
+[ 0.00 0.00 0.00 ] %  0
+[ 0.50 0.50 0.50 ] %  1
+[ 0.78 0.78 0.78 ] %  2
+[ 1.00 1.00 1.00 ] %  3
+[ 0.59 0.00 0.00 ] %  4
+[ 1.00 0.00 0.00 ] %  5
+[ 1.00 0.35 0.39 ] %  6
+[ 1.00 0.55 0.51 ] %  7
+[ 1.00 0.78 0.75 ] %  8
+[ 1.00 0.47 0.28 ] %  9
+[ 0.71 0.39 0.00 ] % 10
+[ 0.78 0.55 0.00 ] % 11
+[ 1.00 0.71 0.00 ] % 12
+[ 1.00 0.82 0.39 ] % 13
+[ 0.47 0.47 0.16 ] % 14
+[ 0.63 0.71 0.12 ] % 15
+[ 0.86 1.00 0.24 ] % 16
+[ 0.90 1.00 0.71 ] % 17
+[ 0.00 0.00 1.00 ] % 18
+[ 0.00 0.39 1.00 ] % 19
+[ 0.00 0.71 1.00 ] % 20
+[ 0.00 1.00 1.00 ] % 21
+[ 0.55 1.00 1.00 ] % 22
+[ 0.44 0.00 0.63 ] % 23
+[ 1.00 0.00 1.00 ] % 24
+[ 0.71 0.43 1.00 ] % 25
+[ 1.00 0.63 1.00 ] % 26
+[ 0.00 0.39 0.00 ] % 27
+[ 0.00 0.78 0.00 ] % 28
+[ 0.47 1.00 0.16 ] % 29
+[ 0.71 1.00 0.51 ] % 30
+[ 0.16 1.00 0.63 ] % 31
 ] def
 
 /colorBin
@@ -86,53 +84,61 @@
 /legend_bin
 {
   5 fontSize
-  yield  0 get (ok)                   8 -95 -110 legendEntry
+  yield  0 get (ok)                  28 -95 -110 legendEntry
   yield  1 get (shortcut)             5 -95 -116 legendEntry
-  yield  2 get (I < 5mA)             23 -95 -122 legendEntry
-  yield  3 get (missing token)       21 -95 -128 legendEntry
-  yield  4 get (i2c error)           24 -95 -134 legendEntry
+  yield  2 get (I < 5mA)             16 -95 -122 legendEntry
+  yield  3 get (missing token)        9 -95 -128 legendEntry
+  yield  4 get (i2c error)           17 -95 -134 legendEntry
   
-  yield  5 get (>= 5 dcol defect)    25 -25 -110 legendEntry
-  yield  6 get (2...4 dcol defect)   26 -25 -116 legendEntry
-  yield  7 get (1 dcol defect)       27 -25 -122 legendEntry
+  yield  5 get (>= 5 dcol defect)    23 -25 -110 legendEntry
+  yield  6 get (2...4 dcol defect)   24 -25 -116 legendEntry
+  yield  7 get (1 dcol defect)       26 -25 -122 legendEntry
 
-  yield  8 get (>= 30 pixel defect)  12  45 -110 legendEntry
-  yield  9 get (10...29 pixel defect)13  45 -116 legendEntry
-  yield 10 get (3...9 pixel defect)  14  45 -122 legendEntry
-  yield 11 get (2 pixel defect)      16  45 -128 legendEntry
-  yield 12 get (1 pixel defect)      18  45 -134 legendEntry
+  yield  8 get (>= 30 pixel defect)  14  45 -110 legendEntry
+  yield  9 get (10...29 pixel defect)18  45 -116 legendEntry
+  yield 10 get (3...9 pixel defect)  19  45 -122 legendEntry
+  yield 11 get (2 pixel defect)      21  45 -128 legendEntry
+  yield 12 get (1 pixel defect)      30  45 -134 legendEntry
 }def
 
 /legend_fail
 {
   5 fontSize
-  yield  0 get (CL5: shortcut)       5  -95 -110 legendEntry
-  yield  1 get (CL5: IdigOn <5mA)        4  -95 -116 legendEntry
-  yield  2 get (CL5: missing token)  0  -95 -122 legendEntry
-  yield  3 get (CL5: i2c error)      1 -95 -128 legendEntry
-  yield  4 get (CL5: >4000 pix def) 24 -95 -134 legendEntry
-
-  yield  6 get (CL4: >40 pix def)   23  -25 -110 legendEntry
-  yield  7 get (CL4: mask def)      22  -25 -116 legendEntry
-  yield  8 get (CL4: address def)   17  -25 -122 legendEntry
-  yield  9 get (CL4: IdigOn >65mA)  26   -25 -128 legendEntry
-  yield 10 get (CL4: IanaOn >65mA)  27   -25 -134 legendEntry
-
-  yield 11 get (CL4: IdigInit)        19   45 -110 legendEntry
-  yield 12 get (CL4: IanaInit)        20   45 -116 legendEntry
-  yield 13 get (CL3: >4 pix def)    25    45 -122 legendEntry
-  yield 22 get (CL2: 1..4 pix def)  13    45 -128 legendEntry
-  yield 23 get (CL1: good)             8   45 -134 legendEntry
+  yield  0 get (CL5: shortcut)       5 -110 -110 legendEntry
+  yield  1 get (CL5: IdigOn <5mA)    4 -110 -116 legendEntry
+  yield  2 get (CL5: missing token)  7 -110 -122 legendEntry
+  yield  3 get (CL5: i2c error)      8 -110 -128 legendEntry
+  yield  4 get (CL5: >4000 pix def)  9 -110 -134 legendEntry
+  yield  6 get (CL4: >40 pix def)   10 -110 -140 legendEntry
+  yield  7 get (CL4: mask def)      11 -110 -146 legendEntry
+  yield  8 get (CL4: address def)   13 -110 -152 legendEntry
+  
+  yield  9 get (CL4: IdigOn >65mA)  24 -40 -110 legendEntry
+  yield 10 get (CL4: IanaOn >65mA)  26 -40 -116 legendEntry
+  yield 11 get (CL4: IdigInit)      23 -40 -122 legendEntry
+  yield 12 get (CL4: IanaInit)      25 -40 -128 legendEntry
+  yield 13 get (CL3: >4 pix def)    17 -40 -134 legendEntry
+  yield 14 get (CL3: Thr mean)      14 -40 -140 legendEntry
+  yield 15 get (CL3: Thr stdev)     15 -40 -146 legendEntry
+  yield 16 get (CL3: Thr col diff)  16 -40 -152 legendEntry
+  
+  yield 17 get (CL3: Ph Offset)     18  45 -110 legendEntry
+  yield 18 get (CL3: Ph Gain)       20  45 -116 legendEntry
+  yield 19 get (CL3: Ph col diff)   22  45 -122 legendEntry
+  yield 20 get (CL3: ID tolerance)   1  45 -128 legendEntry
+  yield 21 get (CL3: IA tolerance)   2  45 -134 legendEntry
+  yield 22 get (CL2: 1..4 pix def)  30  45 -140 legendEntry
+  yield 23 get (CL1: good)          28  45 -146 legendEntry
 }def
 
 /legend_class
 {
   5 fontSize
-  yield 0 get (Class 1)  8   -95 -110 legendEntry
-  yield 1 get (Class 2)  13  -95 -116 legendEntry
-  yield 2 get (Class 3)  25   -25 -110 legendEntry
-  yield 3 get (Class 4)  23  -25 -116 legendEntry
-  yield 4 get (Class 5)  5   45 -113 legendEntry
+  yield 0 get (Class 1) 28 -95 -110 legendEntry
+  yield 1 get (Class 2) 18 -95 -116 legendEntry
+  yield 2 get (Class 3) 23 -25 -110 legendEntry
+  yield 3 get (Class 4) 16 -25 -116 legendEntry
+  yield 4 get (Class 5)  5  45 -113 legendEntry
 }def
 
 /waferCoords

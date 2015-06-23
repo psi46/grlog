@@ -38,9 +38,9 @@ public:
 		FAIL3_TMEAN  = 14,	// Threshold mean value out of range
 		FAIL3_TSTD   = 15,	// Threshold RMS out of range
 		FAIL3_TDIFF  = 16,	// Threoshold col to col difference to high
-		FAIL3_TCOL   = 17,	// 
-		FAIL3_PHOFFS = 18,	// Pulse height offset
-		FAIL3_PHGAIN = 19,	// Pulse height gain
+		FAIL3_PHOFFS = 17,	// Pulse height offset
+		FAIL3_PHGAIN = 18,	// Pulse height gain
+		FAIL3_PHDIFF = 19,	// Pulse height gain col to col difference to high
 		FAIL3_IDCURRENT = 20, // VD current limits
 		FAIL3_IACURRENT = 21, // VA current limits
 		FAIL2_1PM    = 22,	// 1..4 pixel defect
@@ -155,6 +155,7 @@ public:
 // pixel pulse height statistics
 	int nPh;            // number if pixels in statistic
 	double ph1mean;     // mean PH1 values (offset)
+	double ph_col_max;  // difference between adjacent cols
 	double ph21mean;    // mean PH2-PH1 value (gain)
 	double ph1std;      // std dev PH1 values (offset)
 	double ph21std;     // std dev PH2-PH1 values (gain)

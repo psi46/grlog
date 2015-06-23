@@ -54,7 +54,7 @@ protected:
 	static void InstallColorTable();
 
 	static const Int_t SIZE_OF_COLORTABLE;
-	static const CColor COLOR_TABLE[28];
+	static const CColor COLOR_TABLE[];
 
 	static const Int_t nColorBin;
 	static const Int_t colorBin[13];
