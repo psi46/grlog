@@ -815,15 +815,15 @@ void CChip::GetFailString()
 		failstring = s; break;
 
 	case FAIL3_PHOFFS:
-		sprintf(s,"Pulse height offset = %0.1f(+/-%0.1f)\n", ph1mean, ph1std);
+		sprintf(s,"Pulse height offset = %0.1f(+/-%0.1f)", ph1mean, ph1std);
 		failstring = s; break;
 
 	case FAIL3_PHGAIN:
-		sprintf(s,"Pulse height gain = %0.1f(+/-%0.1f)\n", ph21mean, ph21std);
+		sprintf(s,"Pulse height gain = %0.1f(+/-%0.1f)", ph21mean, ph21std);
 		failstring = s; break;
 
 	case FAIL3_PHDIFF:
-		sprintf(s,"Pulse height gain diff = %0.1f\n", ph_col_max);
+		sprintf(s,"Pulse height gain diff = %0.1f", ph_col_max);
 		failstring = s; break;
 
 	case FAIL3_IDCURRENT:

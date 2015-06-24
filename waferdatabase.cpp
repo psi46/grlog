@@ -773,6 +773,7 @@ bool CWaferDataBase::GenerateStatistics(const std::string &filename)
 #define WMAPOFFSX  0
 #define WMAPOFFSY  0
 
+#include "pstemplate.h"
 
 bool CWaferDataBase::GenerateWaferMap(const std::string &filename, unsigned int mode)
 {
@@ -794,10 +795,9 @@ bool CWaferDataBase::GenerateWaferMap(const std::string &filename, unsigned int 
 	for (bin=0; bin<bincount; bin++) yield[bin] = 0;
 
 	if (!ps.open(filename.c_str())) return false;
-	ps.putTempl("");
-	ps.putTempl("prolog_begin.tmpl");
-	ps.putTempl("wmap.tmpl");
-	ps.putTempl("prolog_end.tmpl");
+	ps.puts(ps_templ_prolog_begin);
+	ps.puts(ps_templ_wmap);
+	ps.puts("%%EndProlog\n");
 
 	CChip *p = GetFirst();
 	if (p)

@@ -213,6 +213,7 @@
     <ClInclude Include="logfile.h" />
     <ClInclude Include="pixelmap.h" />
     <ClInclude Include="ps.h" />
+    <ClInclude Include="pstemplate.h" />
     <ClInclude Include="rootgui.h" />
     <ClInclude Include="scanner.h" />
     <ClInclude Include="stdafx.h" />
