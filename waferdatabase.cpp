@@ -796,6 +796,7 @@ bool CWaferDataBase::GenerateWaferMap(const std::string &filename, unsigned int 
 
 	if (!ps.open(filename.c_str())) return false;
 	ps.puts(ps_templ_prolog_begin);
+	ps.printf(ps_templ_logo, VERSIONSTRING);
 	ps.puts(ps_templ_wmap);
 	ps.puts("%%EndProlog\n");
 

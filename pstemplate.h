@@ -17,8 +17,7 @@ const char ps_templ_prolog_begin[] =
 };
 
 
-
-const char ps_templ_wmap[] =
+const char ps_templ_logo[] =
 {
 "/logo\n"
 "{\n"
@@ -29,15 +28,23 @@ const char ps_templ_wmap[] =
 "  newpath 0 11 moveto (WMap) true charpath\n"
 "  gsave 1 setgray fill grestore\n"
 "  0.3 setlinewidth stroke\n"
-"  \n"
+"\n"
 "  /Helvetica findfont [10 0 4 8 0 0] makefont setfont\n"
 "  0 setgray\n"
 "  5 0 moveto (Beat Meier) show\n"
-"  \n"
+"\n"
 "  /Helvetica-Bold findfont [16 0 4 8 0 0] makefont setfont\n"
 "  3 0 rmoveto (PSI LTP) show\n"
+"\n"
+"  /Helvetica findfont [10 0 0 12 0 0] makefont setfont\n"
+"  5 -15 moveto (Version %s) show\n"
 "} bind def\n"
 "\n"
+};
+
+
+const char ps_templ_wmap[] =
+{
 "% wafer map -----------------------------------------------\n"
 "\n"
 "% periodicity (notch right)\n"
@@ -303,7 +310,7 @@ const char ps_templ_wmap[] =
 "  62  680 moveto (Plot type:) show\n"
 "  180 680 moveto plotType show\n"
 "\n"
-"  gsave 450 35 translate 0.7 0.7 scale logo grestore\n"
+"  gsave 450 40 translate 0.7 0.7 scale logo grestore\n"
 "  gsave\n"
 "  314 420 translate\n"
 "  2.3 2.3 scale\n"

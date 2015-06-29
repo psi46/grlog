@@ -217,6 +217,7 @@
     <ClInclude Include="rootgui.h" />
     <ClInclude Include="scanner.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="version.h" />
     <ClInclude Include="waferdatabase.h" />
     <ClInclude Include="wafermap.h" />
     <ClInclude Include="wmapinfo.h" />

@@ -3,6 +3,7 @@
 #pragma once
 //stdafx.h
 
+#include "version.h"
 #include <stdio.h>
 #include <math.h>
 #include <stdarg.h>

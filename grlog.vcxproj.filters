@@ -116,6 +116,9 @@
     <ClInclude Include="pstemplate.h">
       <Filter>Header-Dateien</Filter>
     </ClInclude>
+    <ClInclude Include="version.h">
+      <Filter>Header-Dateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="LinkDef.h">
