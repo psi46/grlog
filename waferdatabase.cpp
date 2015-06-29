@@ -296,7 +296,7 @@ void CWaferDataBase::Calculate()
 	while (p)
 	{
 		p->CalculatePhase2();
-		p->GetFailString();
+		p->GenerateFailString();
 		p = GetNextM(p);
 	}
 
@@ -619,8 +619,7 @@ void CWaferDataBase::GenerateFailStrings()
 	CChip *p = GetFirst();
 	while (p)
 	{
-			p->GetFailString();
-			printf("%s\n",p->failstring.c_str());
+		printf("%s\n",p->failstring.c_str());
 		p = GetNext(p);
 	}
 	return;
@@ -951,6 +950,34 @@ bool CWaferDataBase::GenerateYieldsFile(const std::string &filename, const std::
 
 bool CWaferDataBase::GenerateReportPSI(const std::string &filename)
 {
+	FILE *rpt = fopen("report_chip.txt", "at");
+	if (!rpt) return false;
 
+	int defcount = 0;
+	int failstatistics[24];
+	for (int i=0; i<24; i++) failstatistics[i] = 0;
+
+	CChip *p = GetFirstBad();
+	while (p)
+	{
+		fprintf(rpt, "%s ", waferId.c_str());
+		if (p->existCHIP) fprintf(rpt, "%i%i%c  ", p->mapY, p->mapX, "CDAB"[p->mapPos]);
+		else fputs("     ", rpt);
+
+		if (p->failCode >= 0 && p->failCode < 24) failstatistics[p->failCode]++;
+		fprintf(rpt, "%2i  %s\n", p->failCode, p->failstring.c_str());
+		defcount++;
+		p = GetNextBad(p);
+	}
+	fclose(rpt);
+
+	rpt = fopen("report_wafer.txt", "at");
+	if (!rpt) return false;
+
+	fprintf(rpt, "%s %3i %5.1f  ", waferId.c_str(), 244-defcount, double(244-defcount)/2.44);
+	for (int i=0; i<24; i++) fprintf(rpt, " %3i", failstatistics[i]);
+	fputs("\n", rpt);
+
+	fclose(rpt);
 	return true;
 }

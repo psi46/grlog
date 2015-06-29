@@ -223,7 +223,7 @@ protected:
 	void Pic();
 private:
 	void GetCurrent(CScanner &Log, double *Idig,double *Iana);
-	void GetFailString();
+	void GenerateFailString();
 	friend class CScanner;
 	friend struct CLogFile;
 	friend class CWaferDataBase;

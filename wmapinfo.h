@@ -39,9 +39,12 @@ public:
 	void UpdateVaout(CWaferDataBase &database);
 	void UpdateCalDel(CWaferDataBase &database);
 	void UpdatePm(CWaferDataBase &database);
+	void UpdatePstd(CWaferDataBase &database);
 	void UpdatePmColDiff(CWaferDataBase &database);
 	void UpdatePh1mean(CWaferDataBase &database);
+	void UpdatePh1std(CWaferDataBase &database);
 	void UpdatePh21mean(CWaferDataBase &database);
+	void UpdatePh21std(CWaferDataBase &database);
 	void UpdatePhColDiff(CWaferDataBase &database);
 };
 

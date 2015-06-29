@@ -688,9 +688,9 @@ void CChip::CalculatePhase2()
 	if (nPixUnmaskable > 0)  { CHIPFAIL(FAIL4_MASK) }
 	if (nPixAddrDefect > 0)  { CHIPFAIL(FAIL4_ADDR) }
 
-	if (65.0 < IdigOn) { CHIPFAIL(FAIL4_IDON) }
-	if (65.0 < IanaOn) { CHIPFAIL(FAIL4_IAON) }
-	if (IdigInit < 15.0 || 40.0 < IdigInit) { CHIPFAIL(FAIL4_IDINIT) }
+	if (45.0 < IdigOn) { CHIPFAIL(FAIL4_IDON) }
+	if (10.0 < IanaOn) { CHIPFAIL(FAIL4_IAON) }
+	if (IdigInit < 20.0 || 35.0 < IdigInit) { CHIPFAIL(FAIL4_IDINIT) }
 	std::string pid = wafer->productId;
     if (!pid.compare("v2-v2B")) {
 		if (IanaInit < 10.0 || 35.0 < IanaInit) { CHIPFAIL(FAIL4_IAINIT) }
@@ -708,15 +708,15 @@ void CChip::CalculatePhase2()
 //	int pdiff = pmax-pmin;
 
 	if (pm    < 85.0 || 125.0 < pm)    CHIPFAIL(FAIL3_TMEAN)
-	if (pstd  <  0.5 ||  8.0  < pstd)  CHIPFAIL(FAIL3_TSTD)
+	if (pstd  <  2.0 ||   7.0 < pstd)  CHIPFAIL(FAIL3_TSTD)
 	if (pm_col_max > 5.0)              CHIPFAIL(FAIL3_TDIFF)
 
 
-	if (ph1mean  <  20.0 || 140.0 < ph1mean) CHIPFAIL(FAIL3_PHOFFS)
-	if (ph1std   >  12.0)                    CHIPFAIL(FAIL3_PHOFFS)
+	if (ph1mean  <  30.0 || 130.0 < ph1mean) CHIPFAIL(FAIL3_PHOFFS)
+	if (ph1std   >  10.0)                    CHIPFAIL(FAIL3_PHOFFS)
 	if (ph21mean <  30.0 || 60.0 < ph21mean) CHIPFAIL(FAIL3_PHGAIN)
 	if (ph21std  >   4.0)                    CHIPFAIL(FAIL3_PHGAIN)
-	if (ph_col_max > 6.0)                    CHIPFAIL(FAIL3_PHDIFF)
+	if (ph_col_max > 5.0)                    CHIPFAIL(FAIL3_PHDIFF)
 
 	if (fabs(IdigInit - wafer->IdigInitMean) > 4.0) CHIPFAIL(FAIL3_IDCURRENT)
 	if (fabs(IanaInit - wafer->IanaInitMean) > 5.0) CHIPFAIL(FAIL3_IACURRENT)
@@ -733,9 +733,10 @@ void CChip::CalculatePhase2()
 }
 
 
-void CChip::GetFailString()
+void CChip::GenerateFailString()
 {
-	char s[128];
+	// skip fail string generation if it already exists
+	if (failstring.length() != 0) return;
 
 	switch (failCode)
 	{
@@ -755,89 +756,88 @@ void CChip::GetFailString()
 		failstring = "I2C error"; break;
 
 	case FAIL5_DEF:
-		sprintf(s, "%i pixel defect", nPixDefect);
-		failstring = s; break;
+		failstring = string_printf("%i pixel defect (%i thr, %i ph)",
+			nPixDefect, nPixThrOr, nPhFail); break;
 
 	// --- class 4 -------------------------------------------------------
 	case FAIL4_COL:
 		failstring = "0 dcol defect"; break; //not used
 
 	case FAIL4_PIXNUM:
-		sprintf(s, "%i pixel defect", nPixDefect);
-		failstring = s; break;
+		failstring = string_printf("%i pixel defect (%i thr, %i ph)",
+			nPixDefect, nPixThrOr, nPhFail);
+		break;
 
 	case FAIL4_MASK:
-		sprintf(s, "%i pixel not maskable", nPixUnmaskable); break;
+		failstring = string_printf("%i pixel not maskable", nPixUnmaskable);
+		break;
 
 	case FAIL4_ADDR:
-		sprintf(s, "%i pixel address defect", nPixAddrDefect);
-		failstring = s; break;
+		failstring = string_printf("%i pixel address defect", nPixAddrDefect);
+		break;
 
 	case FAIL4_IDON:
-		sprintf(s, "IdigOn = %0.1f mA (<65 mA)", IdigOn);
-		failstring = s; break;
+		failstring = string_printf("IdigOn = %0.1f mA (<45 mA)", IdigOn);
+		break;
 
 	case FAIL4_IAON:
-		sprintf(s, "IanaOn = %0.1f mA (<65 mA)", IanaOn);
-		failstring = s; break;
+		failstring = string_printf("IanaOn = %0.1f mA (<10 mA)", IanaOn);
+		break;
 
 	case FAIL4_IDINIT:
-		sprintf(s, "IdigInit = %0.1f mA (15...40 mA)", IdigInit);
-		failstring = s; break;
+		failstring = string_printf("IdigInit = %0.1f mA (20...35 mA)", IdigInit);
+		break;
 
 	case FAIL4_IAINIT:
         if (!wafer->productId.compare("v2-v2B")) {
-
-			sprintf(s, "IanaInit = %0.1f mA (10...35 mA)", IanaInit);
-			failstring = s;
+			failstring = string_printf("IanaInit = %0.1f mA (10...35 mA)", IanaInit);
 		}
 		else {
-			sprintf(s, "IanaInit = %0.1f mA (20...35 mA)", IanaInit);
-			failstring = s;
+			failstring = string_printf("IanaInit = %0.1f mA (20...35 mA)", IanaInit);
 		}
 		break;
 
 	// --- class 3 -------------------------------------------------------
 	case FAIL3_1PC:
-		sprintf(s,"%i pixel defect (<=1%%)", nPixDefect);
-		failstring = s; break;
+		failstring = string_printf("%i pixel defect (<=1%%)", nPixDefect);
+		break;
 
 	case FAIL3_TMEAN:
-		sprintf(s,"Thrshold(mean) = %0.1f (30...80)", pm);
-		failstring = s; break;
+		failstring = string_printf("Thrshold(mean) = %0.1f (85...125)", pm);
+		break;
 
 	case FAIL3_TSTD:
-		sprintf(s,"Threshold(rms) = %0.2f (0.5...4.0)", pstd);
-		failstring = s; break;
+		failstring = string_printf("Threshold(rms) = %0.2f (2...7)", pstd);
+		break;
 
 	case FAIL3_TDIFF:
-		sprintf(s,"Threshold(max-min) = %i (5...30)", pmax-pmin);
-		failstring = s; break;
+		failstring = string_printf("Threshold(max-min) = %i (5...30)", pmax-pmin);
+		break;
 
 	case FAIL3_PHOFFS:
-		sprintf(s,"Pulse height offset = %0.1f(+/-%0.1f)", ph1mean, ph1std);
-		failstring = s; break;
+		failstring = string_printf("Pulse height offset = %0.1f(+/-%0.1f)", ph1mean, ph1std);
+		break;
 
 	case FAIL3_PHGAIN:
-		sprintf(s,"Pulse height gain = %0.1f(+/-%0.1f)", ph21mean, ph21std);
-		failstring = s; break;
+		failstring = string_printf("Pulse height gain = %0.1f(+/-%0.1f)", ph21mean, ph21std);
+		break;
 
 	case FAIL3_PHDIFF:
-		sprintf(s,"Pulse height gain diff = %0.1f", ph_col_max);
-		failstring = s; break;
+		failstring = string_printf("Pulse height gain diff = %0.1f", ph_col_max);
+		break;
 
 	case FAIL3_IDCURRENT:
-		sprintf(s,"IdigInit = %0.1f mA (ID(wafer mean)+/-4 mA)", IdigInit);
-		failstring = s; break;
+		failstring = string_printf("IdigInit = %0.1f mA (%0.1f+/-4 mA)", IdigInit, wafer->IanaInitMean);
+		break;
 
 	case FAIL3_IACURRENT:
-		sprintf(s,"IanaInit = %0.1f mA (IA(wafer mean)+/-5 mA)", IanaInit);
-		failstring = s; break;
+		failstring = string_printf("IanaInit = %0.1f mA (%0.1f+/-5 mA)", IanaInit, wafer->IdigInitMean);
+		break;
 
 	// --- class 2 -------------------------------------------------------
 	case FAIL2_1PM:
-		sprintf(s, "%i pixel defect", nPixDefect);
-		failstring = s; break;
+		failstring = string_printf("%i pixel defect", nPixDefect);
+		break;
 		
 	default:
 		failstring = "undefined fail code";

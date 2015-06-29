@@ -296,6 +296,20 @@ void CWmapInfo::UpdatePm(CWaferDataBase &database)
 	fDraw = NULL;
 }
 
+void CWmapInfo::UpdatePstd(CWaferDataBase &database)
+{
+	Reset();
+	fHist = new TH1F("hist","Threshold stdev", 20, 0, 10);
+
+	CChip *p = database.GetFirst();
+	while(p)
+	{
+		if (p->n) fHist->Fill(p->pstd);
+		p = database.GetNext(p);
+	}
+	fDraw = NULL;
+}
+
 void CWmapInfo::UpdatePmColDiff(CWaferDataBase &database)
 {
 	Reset();
@@ -324,6 +338,20 @@ void CWmapInfo::UpdatePh1mean(CWaferDataBase &database)
 	fDraw = NULL;
 }
 
+void CWmapInfo::UpdatePh1std(CWaferDataBase &database)
+{
+	Reset();
+	fHist = new TH1F("hist","Ph1std (Offset)",40, 0, 20);
+
+	CChip *p = database.GetFirst();
+	while(p)
+	{
+		fHist->Fill(p->ph1std);
+		p = database.GetNext(p);
+	}
+	fDraw = NULL;
+}
+
 void CWmapInfo::UpdatePh21mean(CWaferDataBase &database)
 {
 	Reset();
@@ -333,6 +361,20 @@ void CWmapInfo::UpdatePh21mean(CWaferDataBase &database)
 	while(p)
 	{
 		if (p->nPh) fHist->Fill(p->ph21mean);
+		p = database.GetNext(p);
+	}
+	fDraw = NULL;
+}
+
+void CWmapInfo::UpdatePh21std(CWaferDataBase &database)
+{
+	Reset();
+	fHist = new TH1F("hist","Ph21std (Gain)",50, 0, 10);
+
+	CChip *p = database.GetFirst();
+	while(p)
+	{
+		if (p->nPh) fHist->Fill(p->ph21std);
 		p = database.GetNext(p);
 	}
 	fDraw = NULL;

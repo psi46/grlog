@@ -3,6 +3,17 @@
 #include "stdafx.h"
 
 
+std::string string_printf( const std::string format, ...)
+{
+	char s[1024];
+	va_list vl;
+	va_start(vl, format);
+	vsnprintf(s, 1024, format.c_str(), vl);
+	va_end(vl);
+	return s;
+}
+
+
 CCmdLineParameter gName;
 
 
@@ -59,7 +70,7 @@ bool CCmdLineParameter::Process(int argc, char* argv[])
 			switch (argv[i][1])
 			{
 			case 'h': Help(); break;
-			case 'p': dataStructure = 1;
+			case 'p': dataStructure = 1; break;
 			default: puts("illegal argument!\n"); Help(); return false;
 			}
 		}
@@ -139,6 +150,7 @@ void CCmdLineParameter::GenNamesPSI()
 	path_JSON       = path + "database\\";
 	path_XML        = path;
 	path_WaferMap   = path + "maps\\";
+	path_YieldsFile = path;
 	path_ChipView   = path + "chips\\";
 
 	name_Batch      = path1;

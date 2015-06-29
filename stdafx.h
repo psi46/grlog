@@ -14,6 +14,7 @@
 #include <fstream>
 #include <string>
 #include <direct.h>
+#include <stdarg.h>
 
 #include <TROOT.h>
 #include "TRint.h"

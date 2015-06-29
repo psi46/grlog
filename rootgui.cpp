@@ -58,13 +58,19 @@ GrLogMainFrame::GrLogMainFrame(CWaferDataBase &waferData,
 	rb->Connect("Clicked()", "GrLogMainFrame", this, "DoSetMapMode()");
 	rb = new TGRadioButton(selWmap, new TGHotString("CalDel"), WMAP_CALDEL);
 	rb->Connect("Clicked()", "GrLogMainFrame", this, "DoSetMapMode()");
-	rb = new TGRadioButton(selWmap, new TGHotString("PM"), WMAP_PM);
+	rb = new TGRadioButton(selWmap, new TGHotString("ThrMean"), WMAP_PM);
+	rb->Connect("Clicked()", "GrLogMainFrame", this, "DoSetMapMode()");
+	rb = new TGRadioButton(selWmap, new TGHotString("ThrStdev"), WMAP_PSTD);
 	rb->Connect("Clicked()", "GrLogMainFrame", this, "DoSetMapMode()");
 	rb = new TGRadioButton(selWmap, new TGHotString("PMcoldiff"), WMAP_PMCOLDIFF);
 	rb->Connect("Clicked()", "GrLogMainFrame", this, "DoSetMapMode()");
-	rb = new TGRadioButton(selWmap, new TGHotString("Ph1mean"), WMAP_PH1MEAN);
+	rb = new TGRadioButton(selWmap, new TGHotString("Ph1 mean"), WMAP_PH1MEAN);
 	rb->Connect("Clicked()", "GrLogMainFrame", this, "DoSetMapMode()");
-	rb = new TGRadioButton(selWmap, new TGHotString("Ph21mean"), WMAP_PH21MEAN);
+	rb = new TGRadioButton(selWmap, new TGHotString("Ph1 stdev"), WMAP_PH1STD);
+	rb->Connect("Clicked()", "GrLogMainFrame", this, "DoSetMapMode()");
+	rb = new TGRadioButton(selWmap, new TGHotString("Ph21 mean"), WMAP_PH21MEAN);
+	rb->Connect("Clicked()", "GrLogMainFrame", this, "DoSetMapMode()");
+	rb = new TGRadioButton(selWmap, new TGHotString("Ph21 stdev"), WMAP_PH21STD);
 	rb->Connect("Clicked()", "GrLogMainFrame", this, "DoSetMapMode()");
 	rb = new TGRadioButton(selWmap, new TGHotString("PhColDiff"), WMAP_PHCOLDIFF);
 	rb->Connect("Clicked()", "GrLogMainFrame", this, "DoSetMapMode()");
@@ -249,6 +255,11 @@ void GrLogMainFrame::SetMapMode(int mode)
 			fWmap.UpdatePm(fDatabase);
 			break;
 
+		case WMAP_PSTD:
+			fWmapInfo.UpdatePstd(fDatabase);
+			fWmap.UpdatePstd(fDatabase);
+			break;
+
 		case WMAP_PMCOLDIFF:
 			fWmapInfo.UpdatePmColDiff(fDatabase);
 			fWmap.UpdatePmColDiff(fDatabase);
@@ -259,10 +270,21 @@ void GrLogMainFrame::SetMapMode(int mode)
 			fWmap.UpdatePh1mean(fDatabase);
 			break;
 
+		case WMAP_PH1STD:
+			fWmapInfo.UpdatePh1std(fDatabase);
+			fWmap.UpdatePh1std(fDatabase);
+			break;
+
 		case WMAP_PH21MEAN:
 			fWmapInfo.UpdatePh21mean(fDatabase);
 			fWmap.UpdatePh21mean(fDatabase);
 			break;
+
+		case WMAP_PH21STD:
+			fWmapInfo.UpdatePh21std(fDatabase);
+			fWmap.UpdatePh21std(fDatabase);
+			break;
+
 		case WMAP_PHCOLDIFF:
 			fWmapInfo.UpdatePhColDiff(fDatabase);
 			fWmap.UpdatePhColDiff(fDatabase);
@@ -376,6 +398,11 @@ void GrLogMainFrame::DoPSIReport() // PSI test report
 	std::string filename;
 	filename = gName.GetPath_Report() + "psireport.txt";
 	fDatabase.GenerateReportPSI(filename);
+	fWmapMode = WMAP_FAILCODE;
+	DoGenerateWaferMap();
+	fWmapMode = WMAP_CLASS;
+	DoGenerateWaferMap();
+	DoGenerateJSONfile();
 }
 
 

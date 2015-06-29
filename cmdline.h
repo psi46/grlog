@@ -4,6 +4,8 @@
 
 #include <string>
 
+std::string string_printf( const std::string format, ...);
+
 
 class CCmdLineParameter
 {

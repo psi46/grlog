@@ -339,7 +339,22 @@ void CWaferMap::UpdatePm(CWaferDataBase &database)
 	{
 		CWaferPos pos(p->mapX,p->mapY,p->mapPos);
 		Float_t value = p->pm;
-		if (pos.Exist() && p->nPh) Add(p,pos,value);
+		if (pos.Exist() && p->n) Add(p,pos,value);
+		p = database.GetNext(p);
+	}
+}
+
+
+void CWaferMap::UpdatePstd(CWaferDataBase &database)
+{
+	Clear();
+	scale->SetRange(0.0, 10.0);
+	CChip *p = database.GetFirst();
+	while (p)
+	{
+		CWaferPos pos(p->mapX,p->mapY,p->mapPos);
+		Float_t value = p->pstd;
+		if (pos.Exist() && p->n) Add(p,pos,value);
 		p = database.GetNext(p);
 	}
 }
@@ -354,7 +369,7 @@ void CWaferMap::UpdatePmColDiff(CWaferDataBase &database)
 	{
 		CWaferPos pos(p->mapX,p->mapY,p->mapPos);
 		Float_t value = p->pm_col_max;
-		if (pos.Exist() && p->nPh) Add(p,pos,value);
+		if (pos.Exist() && p->n) Add(p,pos,value);
 		p = database.GetNext(p);
 	}
 }
@@ -375,6 +390,21 @@ void CWaferMap::UpdatePh1mean(CWaferDataBase &database)
 }
 
 
+void CWaferMap::UpdatePh1std(CWaferDataBase &database)
+{
+	Clear();
+	scale->SetRange(0.0, 20.0);
+	CChip *p = database.GetFirst();
+	while (p)
+	{
+		CWaferPos pos(p->mapX,p->mapY,p->mapPos);
+		Float_t value = p->ph1std;
+		if (pos.Exist() && p->nPh) Add(p,pos,value);
+		p = database.GetNext(p);
+	}
+}
+
+
 void CWaferMap::UpdatePh21mean(CWaferDataBase &database)
 {
 	Clear();
@@ -384,6 +414,21 @@ void CWaferMap::UpdatePh21mean(CWaferDataBase &database)
 	{
 		CWaferPos pos(p->mapX,p->mapY,p->mapPos);
 		Float_t value = p->ph21mean;
+		if (pos.Exist() && p->nPh) Add(p,pos,value);
+		p = database.GetNext(p);
+	}
+}
+
+
+void CWaferMap::UpdatePh21std(CWaferDataBase &database)
+{
+	Clear();
+	scale->SetRange(0.0, 10.0);
+	CChip *p = database.GetFirst();
+	while (p)
+	{
+		CWaferPos pos(p->mapX,p->mapY,p->mapPos);
+		Float_t value = p->ph21std;
 		if (pos.Exist() && p->nPh) Add(p,pos,value);
 		p = database.GetNext(p);
 	}
