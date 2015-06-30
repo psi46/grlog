@@ -704,22 +704,19 @@ void CChip::CalculatePhase2()
 
 	if (nPixDefect>4) { CHIPFAIL(FAIL3_1PC) }
 
-//  not used criteria (results are not in the log files):
-//	int pdiff = pmax-pmin;
-
-	if (pm    < 85.0 || 125.0 < pm)    CHIPFAIL(FAIL3_TMEAN)
-	if (pstd  <  2.0 ||   7.0 < pstd)  CHIPFAIL(FAIL3_TSTD)
+	if (pm    < 85.0 || 135.0 < pm)    CHIPFAIL(FAIL3_TMEAN)
+	if (pstd  <  2.0 ||   9.0 < pstd)  CHIPFAIL(FAIL3_TSTD)
 	if (pm_col_max > 5.0)              CHIPFAIL(FAIL3_TDIFF)
 
 
-	if (ph1mean  <  30.0 || 130.0 < ph1mean) CHIPFAIL(FAIL3_PHOFFS)
+	if (ph1mean  <  20.0 || 135.0 < ph1mean) CHIPFAIL(FAIL3_PHOFFS)
 	if (ph1std   >  10.0)                    CHIPFAIL(FAIL3_PHOFFS)
 	if (ph21mean <  30.0 || 60.0 < ph21mean) CHIPFAIL(FAIL3_PHGAIN)
 	if (ph21std  >   4.0)                    CHIPFAIL(FAIL3_PHGAIN)
 	if (ph_col_max > 5.0)                    CHIPFAIL(FAIL3_PHDIFF)
 
-	if (fabs(IdigInit - wafer->IdigInitMean) > 4.0) CHIPFAIL(FAIL3_IDCURRENT)
-	if (fabs(IanaInit - wafer->IanaInitMean) > 5.0) CHIPFAIL(FAIL3_IACURRENT)
+	if (fabs(IdigInit - wafer->IdigInitMean) > 3.5) CHIPFAIL(FAIL3_IDCURRENT)
+	if (fabs(IanaInit - wafer->IanaInitMean) > 6.0) CHIPFAIL(FAIL3_IACURRENT)
 
 
 	// --- class 2 -------------------------------------------------------
@@ -807,11 +804,11 @@ void CChip::GenerateFailString()
 		break;
 
 	case FAIL3_TSTD:
-		failstring = string_printf("Threshold(rms) = %0.2f (2...7)", pstd);
+		failstring = string_printf("Threshold(rms) = %0.2f (2...9)", pstd);
 		break;
 
 	case FAIL3_TDIFF:
-		failstring = string_printf("Threshold(max-min) = %i (5...30)", pmax-pmin);
+		failstring = string_printf("Threshold col-col diff = %0.1f (<5)", pm_col_max);
 		break;
 
 	case FAIL3_PHOFFS:
@@ -831,7 +828,7 @@ void CChip::GenerateFailString()
 		break;
 
 	case FAIL3_IACURRENT:
-		failstring = string_printf("IanaInit = %0.1f mA (%0.1f+/-5 mA)", IanaInit, wafer->IdigInitMean);
+		failstring = string_printf("IanaInit = %0.1f mA (%0.1f+/-6 mA)", IanaInit, wafer->IdigInitMean);
 		break;
 
 	// --- class 2 -------------------------------------------------------

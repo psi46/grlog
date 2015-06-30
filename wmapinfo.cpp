@@ -313,7 +313,7 @@ void CWmapInfo::UpdatePstd(CWaferDataBase &database)
 void CWmapInfo::UpdatePmColDiff(CWaferDataBase &database)
 {
 	Reset();
-	fHist = new TH1F("hist","Threshold diff between cols", 10, 0, 10);
+	fHist = new TH1F("hist","Threshold max col-col diff", 20, 0, 10);
 
 	CChip *p = database.GetFirst();
 	while(p)
