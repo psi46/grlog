@@ -76,9 +76,9 @@ const CColor CColorScale::COLOR_TABLE[SIZE_OF_COLORTABLE] =
 	{ 1.00, 0.71, 0.00 },  // 12
 	{ 1.00, 0.82, 0.39 },  // 13
 
-	{ 0.47, 0.47, 0.16 },  // 14
-	{ 0.63, 0.71, 0.12 },  // 15
-	{ 0.86, 1.00, 0.24 },  // 16
+	{ 0.40, 0.36, 0.125 },  // 14
+	{ 0.61, 0.61, 0.125 },  // 15
+	{ 1.00, 1.00, 0.00 },  // 16
 	{ 0.90, 1.00, 0.71 },  // 17
 
 	{ 0.00, 0.00, 1.00 },  // 18
@@ -90,7 +90,7 @@ const CColor CColorScale::COLOR_TABLE[SIZE_OF_COLORTABLE] =
 	{ 0.44, 0.00, 0.63 },  // 23
 	{ 1.00, 0.00, 1.00 },  // 24
 	{ 0.71, 0.43, 1.00 },  // 25
-	{ 1.00, 0.63, 1.00 },  // 26
+	{ 1.00, 0.70, 1.00 },  // 26
 
 	{ 0.00, 0.39, 0.00 },  // 27
 	{ 0.00, 0.78, 0.00 },  // 28
@@ -105,7 +105,7 @@ const Int_t CColorScale::colorBin[nColorBin] =
 {
 	28, // bin  0
 	 5, // bin  1
-	16, // bin  2
+	15, // bin  2
 	 9, // bin  3
 	17, // bin  4
 	13, // bin  5
@@ -127,24 +127,24 @@ const Int_t CColorScale::colorFail[nColorFail] =
 	 7,  // fail  2
 	 8,  // fail  3
 	 9,  // fail  4
-	 3,  // fail  5 ?
-	10,  // fail  6
-	11,  // fail  7
+	 3,  // fail  5 ?//not used
+	16,  // fail  6
+	10,  // fail  7
 	13,  // fail  8
-	24,  // fail  9
-	26,  // fail 10
-	23,  // fail 11
-	25,  // fail 12
-	17,  // fail 13
-	14,  // fail 14
-	15,  // fail 15
-	16,	 // fail 16
-	18,  // fail 17
+	14,  // fail  9
+	15,  // fail 10
+	17,  // fail 11
+	 3,  // fail 12
+	26,  // fail 13
+	23,  // fail 14
+	24,  // fail 15
+	25,	 // fail 16
+	31,  // fail 17
 	20,  // fail 18
 	22,  // fail 19
 	 1,  // fail 20
 	 2,  // fail 21
-	30,  // fail 22
+	18,  // fail 22
 	28   // fail 23
 };
 
