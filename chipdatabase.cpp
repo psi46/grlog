@@ -800,7 +800,7 @@ void CChip::GenerateFailString()
 		break;
 
 	case FAIL3_TMEAN:
-		failstring = string_printf("Thrshold(mean) = %0.1f (85...125)", pm);
+		failstring = string_printf("Thrshold(mean) = %0.1f (85...135)", pm);
 		break;
 
 	case FAIL3_TSTD:
@@ -812,11 +812,11 @@ void CChip::GenerateFailString()
 		break;
 
 	case FAIL3_PHOFFS:
-		failstring = string_printf("Pulse height offset = %0.1f(+/-%0.1f) (20...135 +/-10)", ph1mean, ph1std);
+		failstring = string_printf("PH offset = %0.1f(+/-%0.1f) (20...135 +/-10)", ph1mean, ph1std);
 		break;
 
 	case FAIL3_PHGAIN:
-		failstring = string_printf("Pulse height gain = %0.1f(+/-%0.1f)", ph21mean, ph21std);
+		failstring = string_printf("PH gain = %0.1f(+/-%0.1f)", ph21mean, ph21std);
 		break;
 
 	case FAIL3_PHDIFF:
@@ -824,16 +824,17 @@ void CChip::GenerateFailString()
 		break;
 
 	case FAIL3_IDCURRENT:
-		failstring = string_printf("IdigInit = %0.1f mA (%0.1f+/-3.5 mA)", IdigInit, wafer->IanaInitMean);
+		failstring = string_printf("IdigInit out of tolerance (%0.1f+/-3.5 mA)", wafer->IdigInitMean);
 		break;
 
 	case FAIL3_IACURRENT:
-		failstring = string_printf("IanaInit = %0.1f mA (%0.1f+/-6 mA)", IanaInit, wafer->IdigInitMean);
+		failstring = string_printf("IanaInit out of tolerance (%0.1f+/-6.0 mA)", wafer->IanaInitMean);
 		break;
 
 	// --- class 2 -------------------------------------------------------
 	case FAIL2_1PM:
-		failstring = string_printf("%i pixel defect", nPixDefect);
+		failstring = string_printf("%i pixel defect (%i thr, %i ph)",
+			nPixDefect, nPixThrOr, nPhFail);
 		break;
 		
 	default:
