@@ -812,7 +812,7 @@ void CChip::GenerateFailString()
 		break;
 
 	case FAIL3_PHOFFS:
-		failstring = string_printf("Pulse height offset = %0.1f(+/-%0.1f)", ph1mean, ph1std);
+		failstring = string_printf("Pulse height offset = %0.1f(+/-%0.1f) (20...135 +/-10)", ph1mean, ph1std);
 		break;
 
 	case FAIL3_PHGAIN:
@@ -820,11 +820,11 @@ void CChip::GenerateFailString()
 		break;
 
 	case FAIL3_PHDIFF:
-		failstring = string_printf("Pulse height gain diff = %0.1f", ph_col_max);
+		failstring = string_printf("Pulse height gain diff = %0.1f (>5)", ph_col_max);
 		break;
 
 	case FAIL3_IDCURRENT:
-		failstring = string_printf("IdigInit = %0.1f mA (%0.1f+/-4 mA)", IdigInit, wafer->IanaInitMean);
+		failstring = string_printf("IdigInit = %0.1f mA (%0.1f+/-3.5 mA)", IdigInit, wafer->IanaInitMean);
 		break;
 
 	case FAIL3_IACURRENT:
