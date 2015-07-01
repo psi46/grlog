@@ -652,14 +652,20 @@ bool CWaferDataBase::GenerateClassList(const std::string &filename) //fail code 
 {
 	FILE *f = fopen(filename.c_str(), "wt");
 	if (f==NULL) return false;
+	int totChips = 0, CL1Chips = 0;
 	CChip *p = GetFirst();
 	while (p)
 	{
+	   totChips++;
+       if((p->chipClass)== 1) CL1Chips++;
   	   fprintf(f,"%i%i%c %i %i",
 				p->mapY, p->mapX, "CDAB"[p->mapPos], p->chipClass, (int)p->failCode);
-			fputs("\n", f);
+		fputs("\n", f);
 		p = GetNext(p);
-	}
+	}	
+	double Yield = ((double)CL1Chips/(double)totChips)*100;
+	fprintf(f,"%s %s %i %.1f\n", waferId.c_str(), startTime.GetXmlDateTime().c_str(), CL1Chips,Yield); //wafer - test date - #goodROCs, yield(CL1)
+
 	fclose(f);
 	return true;
 }
@@ -877,12 +883,15 @@ bool CWaferDataBase::GenerateWaferMap(const std::string &filename, unsigned int 
 bool CWaferDataBase::GenerateYieldsFile(const std::string &filename, const std::string &batchname){
 
     std::string wlistfile = gName.GetPath_YieldsFile() + "waferlist_" + batchname + ".dat";
+	std::string filename2 = gName.GetPath_YieldsFile() + "Yields_" + batchname + ".txt";
 
 	int Fail[24] = {};
 	int Cl[5] = {};
 	int n=1;	
 	std::vector<std::string> waferlist;
-    ifstream infile;
+    ifstream infile;	
+    ofstream foutput2;
+	foutput2.open (filename2);  
     infile.open (wlistfile);
 	if (infile == NULL) 
 	{
@@ -910,10 +919,17 @@ bool CWaferDataBase::GenerateYieldsFile(const std::string &filename, const std::
       int fail, cl, roc;
 	  cl = fail = 0;
 	  char g;
+	  bool lastline = false;
+	  std::string line;
       while(!infile.eof())
 	  {
-	    std::string line;
+  	    n++;
 	    getline(infile,line);
+		if(line.size()>10){ //last row with Yield info
+		  foutput2.write(line.c_str(),line.size());
+  		  foutput2.write("\n",1);
+		  break;
+		}
 	    sscanf(line.c_str(),"%i%c %i %i",&roc,&g,&cl,&fail);	  
 	    for(int i=0; i<5; i++) {
  		  if(cl == i+1) Cl[i]++;
@@ -921,8 +937,7 @@ bool CWaferDataBase::GenerateYieldsFile(const std::string &filename, const std::
 	    for(int i=0; i<24; i++) {
 		  if(fail == i) Fail[i]++;
 	    }  
-	    n++;
-      }n--;
+      }n--;    
       infile.close();
     }
 
@@ -944,6 +959,7 @@ bool CWaferDataBase::GenerateYieldsFile(const std::string &filename, const std::
 		foutput << i+1 << "\t" << Cl[i] << "\t" << yield << std::endl;
 	}  
     foutput.close();
+    foutput2.close();
     return true;
 }
 

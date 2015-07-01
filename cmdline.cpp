@@ -128,7 +128,7 @@ void CCmdLineParameter::GenNames()
 	name_Pick       = path_Pick + logName + "_pick.txt";
 	name_JSON       = path_JSON + logName + "_db.json";
 	name_WaferMap   = path_WaferMap + logName + "_wmap_";
-	name_YieldsFile = path_YieldsFile + "yields_";
+	name_YieldsFile = path_YieldsFile + "Stats_";
 	name_ChipView   = path_ChipView + logName;
 }
 
@@ -161,7 +161,7 @@ void CCmdLineParameter::GenNamesPSI()
 	name_Pick       = path_Pick + logName + "_pick.txt";
 	name_JSON       = path_JSON + logName + "_db.json";
 	name_WaferMap   = path_WaferMap + logName + "_wmap_";
-	name_YieldsFile = path_YieldsFile + "yields_";
+	name_YieldsFile = path_YieldsFile + "Stats_";
 	name_ChipView   = path_ChipView + logName + "_ROC";
 }
 

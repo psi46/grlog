@@ -130,7 +130,7 @@ const Int_t CColorScale::colorFail[nColorFail] =
 	 3,  // fail  5 ?//not used
 	16,  // fail  6
 	10,  // fail  7
-	13,  // fail  8
+	12,  // fail  8
 	14,  // fail  9
 	15,  // fail 10
 	17,  // fail 11
