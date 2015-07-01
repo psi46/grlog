@@ -48,12 +48,11 @@ int ReadLogFile(const std::string &filename)
 
 int main(int argc, char* argv[])
 {
-	printf("grlog (12.6.2015)\n");
+	printf("grlog (" VERSIONSTRING ")\n");
 
 	// === Retrieve log file name ==============================================
 
 	if (!gName.Process(argc, argv)) return 1;
-
 //	_mkdir(gName.GetPath().c_str());
 
 	// === read logfile -> waferData ===========================================

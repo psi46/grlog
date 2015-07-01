@@ -69,7 +69,7 @@ bool CCmdLineParameter::Process(int argc, char* argv[])
 		{
 			switch (argv[i][1])
 			{
-			case 'h': Help(); break;
+			case 'h': Help(); return false;
 			case 'p': dataStructure = 1; break;
 			default: puts("illegal argument!\n"); Help(); return false;
 			}
