@@ -479,10 +479,20 @@ void GrLogMainFrame::PrintWaferMap()
 			filename = gName.GetName_WaferMap("caldel"); break;
 		case WMAP_PM:
 			filename = gName.GetName_WaferMap("pm"); break;
+		case WMAP_PSTD:
+			filename = gName.GetName_WaferMap("pstd"); break;
+		case WMAP_PMCOLDIFF:
+			filename = gName.GetName_WaferMap("pmcoldiff"); break;
 		case WMAP_PH1MEAN:
 			filename = gName.GetName_WaferMap("ph1mean"); break;
+		case WMAP_PH1STD:
+			filename = gName.GetName_WaferMap("ph1std"); break;
 		case WMAP_PH21MEAN:
 			filename = gName.GetName_WaferMap("ph21mean"); break;
+		case WMAP_PH21STD:
+			filename = gName.GetName_WaferMap("ph21std"); break;
+		case WMAP_PHCOLDIFF:
+			filename = gName.GetName_WaferMap("phcoldiff"); break;
 		default: return;
 	}
 
