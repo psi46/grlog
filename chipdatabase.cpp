@@ -704,7 +704,7 @@ void CChip::CalculatePhase2()
 
 	if (nPixDefect>4) { CHIPFAIL(FAIL3_1PC) }
 
-	if (pm    < 85.0 || 160.0 < pm)    CHIPFAIL(FAIL3_TMEAN) //debug - PSI = 135 --- 160.0 old
+	if (pm    < 95.0 || 150.0 < pm)    CHIPFAIL(FAIL3_TMEAN) //debug - PSI = 85-135
 	if (pstd  <  2.0 ||   9.0 < pstd)  CHIPFAIL(FAIL3_TSTD)
 	if (pm_col_max > 5.0)              CHIPFAIL(FAIL3_TDIFF)
 
@@ -800,7 +800,7 @@ void CChip::GenerateFailString()
 		break;
 
 	case FAIL3_TMEAN:
-		failstring = string_printf("Thrshold(mean) = %0.1f (85...160)", pm); //debug - PSI = 135 --- 160.0 old
+		failstring = string_printf("Thrshold(mean) = %0.1f (95...150)", pm); //debug - PSI = 85-135 
 		break;
 
 	case FAIL3_TSTD:
