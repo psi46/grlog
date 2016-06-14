@@ -8,7 +8,7 @@ bool CWaferPos::Exist()
 {
 	if (pos<0 || 3<pos) return false;
 	if (y<0 || 7<y) return false;
-	if (x<0 || 9<x) return false;
+	if (x<0 || 10<x) return false;
 //	if ((y==0 || y==7) && (x<3 || 6<x)) return false;
 //	if ((y==1 || y==5 || y==6) && (x<1 || 8<x)) return false;
 	return true;
@@ -19,7 +19,7 @@ void  TChipBox::ExecuteEvent(Int_t event, Int_t px, Int_t py)
 {
 	if (event == kButton1Down)
 	{
-		printf("open chip %i%i%c\n",	fChipbox->fPos.x, fChipbox->fPos.y,
+		printf("open chip %X%X%c\n",	fChipbox->fPos.x, fChipbox->fPos.y,
 			"CDAB"[fChipbox->fPos.pos]);
 
 		CChipView *chipview = 
@@ -36,8 +36,8 @@ CChipBox::CChipBox(CChip *chip, CWaferPos &pos, float value, int colNum)
 	fValue = value;
 	fChipData = chip;
 	fPos = pos;
-	float x = 0.035 + float(fPos.x)*0.075;
-	float y = 0.82 - float(fPos.y)*0.112;
+	float x = 0.05 + float(fPos.x)*0.075;
+	float y = 0.84 - float(fPos.y)*0.112;
 	switch (fPos.pos)
 	{
 		case 1: x += 0.036; break;

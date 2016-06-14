@@ -442,7 +442,7 @@ bool CWaferDataBase::GenerateJSONfile(const std::string &filename)
 		char rocId[16];
 		CChip &chip = *p;
 
-		sprintf(rocId, "%s-%i%i%c", waferId.c_str(), chip.mapY, chip.mapX, "CDAB"[chip.mapPos]);
+		sprintf(rocId, "%s-%X%X%c", waferId.c_str(), chip.mapY, chip.mapX, "CDAB"[chip.mapPos]);
 		//to handle reticle with different ROC types:
 		std::string pid = productId;
 		std::string strroc = rocId;
@@ -635,7 +635,7 @@ bool CWaferDataBase::GenerateErrorReport(const std::string &filename)
 	{
 		if (p->chipClass > 1)
 		{
-			fprintf(f,"Chip %i%i%c Class %i: ",
+			fprintf(f,"Chip %X%X%c Class %i: ",
 				p->mapY, p->mapX, "CDAB"[p->mapPos], p->chipClass);
 			fprintf(f,p->failstring.c_str());
 			fputs("\n", f);
@@ -658,7 +658,7 @@ bool CWaferDataBase::GenerateClassList(const std::string &filename) //fail code 
 	{
 	   totChips++;
        if((p->chipClass)== 1) CL1Chips++;
-  	   fprintf(f,"%i%i%c %i %i",
+  	   fprintf(f,"%X%X%c %i %i",
 				p->mapY, p->mapX, "CDAB"[p->mapPos], p->chipClass, (int)p->failCode);
 		fputs("\n", f);
 		p = GetNext(p);
@@ -680,7 +680,7 @@ bool CWaferDataBase::GenerateDataTable(const std::string &filename)
 	CChip *p = GetFirst();
 	while (p)
 	{
-		fprintf(f, "%-9s %i%i%c  %2i %2i %2i  %i %2i  %5.1f %5.1f",
+		fprintf(f, "%-9s %X%X%c  %2i %2i %2i  %i %2i  %5.1f %5.1f",
 			waferId.c_str(), p->mapY, p->mapX, "CDAB"[p->mapPos], p->picX, p->picY, p->bin,
 			p->pickClass, p->pickGroup, p->IdigOn, p->IanaOn);
 		if (p->IdigInit>=0.0)  fprintf(f," %5.1f", p->IdigInit);    else fputs("      ",f);
@@ -977,7 +977,7 @@ bool CWaferDataBase::GenerateReportPSI(const std::string &filename)
 	while (p)
 	{
 		fprintf(rpt, "%s ", waferId.c_str());
-		if (p->existCHIP) fprintf(rpt, "%i%i%c  ", p->mapY, p->mapX, "CDAB"[p->mapPos]);
+		if (p->existCHIP) fprintf(rpt, "%X%X%c  ", p->mapY, p->mapX, "CDAB"[p->mapPos]);
 		else fputs("     ", rpt);
 
 		if (p->failCode >= 0 && p->failCode < 24) failstatistics[p->failCode]++;

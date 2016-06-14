@@ -231,7 +231,7 @@ void CChip::ReadCHIP(CScanner &Log)
 	}
 
 	char s[16];
-	sprintf(s, "%i%i%c", mapY, mapX, ch);
+	sprintf(s, "%X%X%c", mapY, mapX, ch);
 	chipId = s;
 	existCHIP = true;
 	Log.getNextSection();

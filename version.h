@@ -1,3 +1,3 @@
 // grlog version
 
-#define VERSIONSTRING "2015-06-30"
+#define VERSIONSTRING "2016-06-14"

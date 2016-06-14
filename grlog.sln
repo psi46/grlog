@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "grlog", "grlog.vcxproj", "{BD3D4B9F-4B81-B27E-3629-EE5D555E6076}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "grlog", "grlog.vcxproj", "{14A6D819-5BC1-4549-F99D-187DFD8FED73}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,10 +9,10 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BD3D4B9F-4B81-B27E-3629-EE5D555E6076}.Debug|Win32.ActiveCfg = Debug|Win32
-		{BD3D4B9F-4B81-B27E-3629-EE5D555E6076}.Debug|Win32.Build.0 = Debug|Win32
-		{BD3D4B9F-4B81-B27E-3629-EE5D555E6076}.Release|Win32.ActiveCfg = Release|Win32
-		{BD3D4B9F-4B81-B27E-3629-EE5D555E6076}.Release|Win32.Build.0 = Release|Win32
+		{14A6D819-5BC1-4549-F99D-187DFD8FED73}.Debug|Win32.ActiveCfg = Debug|Win32
+		{14A6D819-5BC1-4549-F99D-187DFD8FED73}.Debug|Win32.Build.0 = Debug|Win32
+		{14A6D819-5BC1-4549-F99D-187DFD8FED73}.Release|Win32.ActiveCfg = Release|Win32
+		{14A6D819-5BC1-4549-F99D-187DFD8FED73}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

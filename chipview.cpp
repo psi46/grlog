@@ -153,7 +153,7 @@ void CChipView::CreateSubPads(TPad *upad)
 void CChipView::SetTitle()
 {
 	char s[32];
-	sprintf(s, "Chip: %i%i%c", fChip->mapY, fChip->mapX,
+	sprintf(s, "Chip: %X%X%c", fChip->mapY, fChip->mapX,
 		"CDAB"[fChip->mapPos]);
 	fMain->SetWindowName(s);
 }
@@ -305,7 +305,7 @@ void CChipView::PrintChipView()
 	_mkdir(gName.GetPath_ChipView().c_str());
 	
 	char cc[10];
-	sprintf(cc,"_%i%i%c", fChip->mapY, fChip->mapX, "CDAB"[fChip->mapPos]);
+	sprintf(cc,"_%X%X%c", fChip->mapY, fChip->mapX, "CDAB"[fChip->mapPos]);
 	std::string str = cc;
 	switch (fViewMode)
 	{
@@ -419,11 +419,11 @@ void CChipView::DrawInfo()
 
 	// Chip id
 	if (fChip->multiCount)
-		sprintf(s,"Chip:   %i%i%c (%i/%i) (%i of %i)", fChip->mapY, fChip->mapX,
+		sprintf(s,"Chip:   %X%X%c (%i/%i) (%i of %i)", fChip->mapY, fChip->mapX,
 			"CDAB"[fChip->mapPos], fChip->picX, fChip->picY,
 			fChip->multiCount - fChip->multiNum + 1, fChip->multiCount+1);
 	else
-		sprintf(s,"Chip:   %i%i%c (%i/%i)", fChip->mapY, fChip->mapX,
+		sprintf(s,"Chip:   %X%X%c (%i/%i)", fChip->mapY, fChip->mapX,
 			"CDAB"[fChip->mapPos], fChip->picX, fChip->picY);
 
 	t.DrawText(0.05,0.93,s);
