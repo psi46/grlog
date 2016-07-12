@@ -192,6 +192,8 @@ void CChip::Read(CScanner &Log)
 	if (Log.isSection("PHSCAN")) Log.getNextSection();
 	if (Log.isSection("PHSCAN")) Log.getNextSection();
 
+	if (Log.isSection("DCBUFFER")) Log.getNextSection();
+
 	// read [PIXMAP] section if exist
 	if (Log.isSection("PIXMAP")) ReadPIXMAP(Log);
 
