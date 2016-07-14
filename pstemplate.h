@@ -142,7 +142,7 @@ const char ps_templ_wmap[] =
 "  yield  7 get (CL4: mask def)      10 -110 -146 legendEntry\n"
 "  yield  8 get (CL4: address def)   12 -110 -152 legendEntry\n"
 "  \n"
-"  yield  9 get (CL4: IdigOn >45mA)  14 -40 -110 legendEntry\n"
+"  yield  9 get (CL4: IdigOn >65mA)  14 -40 -110 legendEntry\n"
 "  yield 10 get (CL4: IanaOn >10mA)  15 -40 -116 legendEntry\n"
 "  yield 11 get (CL4: IdigInit)      17 -40 -122 legendEntry\n"
 "  yield 12 get (CL4: IanaInit)       3 -40 -128 legendEntry\n"

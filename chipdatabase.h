@@ -212,6 +212,7 @@ protected:
 	void ReadVANA_Entry(CScanner &Log, int index, int value);
 	void ReadITRIM(CScanner &Log);
 	void ReadCALDELSCAN(CScanner &Log);
+	void ReadDCBUFFER(CScanner &Log);
 	void ReadPIXMAP(CScanner &Log);
 	void ReadPULSE(CScanner &Log);
 	void ReadPH1(CScanner &Log);

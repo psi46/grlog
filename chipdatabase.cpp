@@ -192,7 +192,7 @@ void CChip::Read(CScanner &Log)
 	if (Log.isSection("PHSCAN")) Log.getNextSection();
 	if (Log.isSection("PHSCAN")) Log.getNextSection();
 
-	if (Log.isSection("DCBUFFER")) Log.getNextSection();
+	if (Log.isSection("DCBUFFER")) ReadDCBUFFER(Log);
 
 	// read [PIXMAP] section if exist
 	if (Log.isSection("PIXMAP")) ReadPIXMAP(Log);
@@ -401,6 +401,7 @@ void CChip::ReadITRIM(CScanner &Log)
 	Log.getNextSection();
 }
 
+
 void CChip::ReadCALDELSCAN(CScanner &Log)
 {
 	if (sscanf(Log.getNextLine(),"%i %i %i", &cds_x, &cds_y, &cds_del) != 3)
@@ -410,12 +411,22 @@ void CChip::ReadCALDELSCAN(CScanner &Log)
 	Log.getNextSection();
 }
 
+
+void CChip::ReadDCBUFFER(CScanner &Log)
+{
+	// todo
+
+	Log.getNextSection();
+}
+
+
 void CChip::ReadPIXMAP(CScanner &Log)
 {
 	Log.getNextLine();
 	if (!pixmap.ReadPixMap(Log)) ERROR_ABORT(ERROR_PIXEL)
 	Log.getNextSection();
 }
+
 
 void CChip::ReadPULSE(CScanner &Log)
 {
@@ -424,6 +435,7 @@ void CChip::ReadPULSE(CScanner &Log)
 	Log.getNextSection();
 }
 
+
 void CChip::ReadPH1(CScanner &Log)
 {
 	Log.getNextLine();
@@ -431,12 +443,14 @@ void CChip::ReadPH1(CScanner &Log)
 	Log.getNextSection();
 }
 
+
 void CChip::ReadPH2(CScanner &Log)
 {
 	Log.getNextLine();
 	if (!pixmap.ReadPulseHeight2(Log)) ERROR_ABORT(ERROR_PH2)
 	Log.getNextSection();
 }
+
 
 void CChip::ReadPUC(CScanner &Log)
 {
@@ -460,11 +474,13 @@ void CChip::ReadPUC(CScanner &Log)
 	pixmap.levelExist = true;
 }
 
+
 void CChip::ReadClass(CScanner &Log)
 {
 	if (sscanf(Log.getNextLine(),"%i", &logChipClass)!=1) ERROR_ABORT(ERROR_CLASS)
 	Log.getNextSection();
 }
+
 
 void CChip::ReadPOFF(CScanner &Log)
 {
@@ -690,15 +706,15 @@ void CChip::CalculatePhase2()
 	if (nPixUnmaskable > 0)  { CHIPFAIL(FAIL4_MASK) }
 	if (nPixAddrDefect > 0)  { CHIPFAIL(FAIL4_ADDR) }
 
-	if (45.0 < IdigOn) { CHIPFAIL(FAIL4_IDON) }
+	if (65.0 < IdigOn) { CHIPFAIL(FAIL4_IDON) }
 	if (10.0 < IanaOn) { CHIPFAIL(FAIL4_IAON) }
-	if (IdigInit < 20.0 || 35.0 < IdigInit) { CHIPFAIL(FAIL4_IDINIT) }
+	if (IdigInit < 30.0 || 40.0 < IdigInit) { CHIPFAIL(FAIL4_IDINIT) }
 	std::string pid = wafer->productId;
     if (!pid.compare("v2-v2B")) {
-		if (IanaInit < 10.0 || 35.0 < IanaInit) { CHIPFAIL(FAIL4_IAINIT) }
+		if (IanaInit < 22.0 || 38.0 < IanaInit) { CHIPFAIL(FAIL4_IAINIT) }
 	}
 	else {
-		if (IanaInit < 20.0 || 35.0 < IanaInit) { CHIPFAIL(FAIL4_IAINIT) }
+		if (IanaInit < 22.0 || 38.0 < IanaInit) { CHIPFAIL(FAIL4_IAINIT) }
 	}
 
 	// --- class 3 -------------------------------------------------------
@@ -706,15 +722,15 @@ void CChip::CalculatePhase2()
 
 	if (nPixDefect>4) { CHIPFAIL(FAIL3_1PC) }
 
-	if (pm    < 85.0 || 135.0 < pm)    CHIPFAIL(FAIL3_TMEAN)
-	if (pstd  <  2.0 ||   9.0 < pstd)  CHIPFAIL(FAIL3_TSTD)
-	if (pm_col_max > 5.0)              CHIPFAIL(FAIL3_TDIFF)
+	if (pm    < 110.0 || 160.0 < pm)    CHIPFAIL(FAIL3_TMEAN)
+	if (pstd  <   2.0 ||   9.0 < pstd)  CHIPFAIL(FAIL3_TSTD)
+	if (pm_col_max > 5.0)               CHIPFAIL(FAIL3_TDIFF)
 
 
-	if (ph1mean  <  20.0 || 135.0 < ph1mean) CHIPFAIL(FAIL3_PHOFFS)
-	if (ph1std   >  10.0)                    CHIPFAIL(FAIL3_PHOFFS)
-	if (ph21mean <  30.0 || 60.0 < ph21mean) CHIPFAIL(FAIL3_PHGAIN)
-	if (ph21std  >   4.0)                    CHIPFAIL(FAIL3_PHGAIN)
+	if (ph1mean  <  20.0 || 120.0 < ph1mean) CHIPFAIL(FAIL3_PHOFFS)
+	if (ph1std   >  14.0)                    CHIPFAIL(FAIL3_PHOFFS)
+	if (ph21mean <  20.0 || 35.0 < ph21mean) CHIPFAIL(FAIL3_PHGAIN)
+	if (ph21std  >   3.0)                    CHIPFAIL(FAIL3_PHGAIN)
 	if (ph_col_max > 5.0)                    CHIPFAIL(FAIL3_PHDIFF)
 
 	if (fabs(IdigInit - wafer->IdigInitMean) > 3.5) CHIPFAIL(FAIL3_IDCURRENT)
