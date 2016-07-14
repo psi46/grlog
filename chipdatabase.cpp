@@ -414,7 +414,14 @@ void CChip::ReadCALDELSCAN(CScanner &Log)
 
 void CChip::ReadDCBUFFER(CScanner &Log)
 {
-	// todo
+	Log.getNextLine(); // skip line that contains the section tag
+
+	// --- read till next tag or empty line
+	while (Log.getNextLine()[0] != 0) // not empty string
+	{
+		// todo
+		// access to current line with Log.getLine();
+	}
 
 	Log.getNextSection();
 }
