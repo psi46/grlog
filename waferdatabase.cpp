@@ -966,6 +966,7 @@ bool CWaferDataBase::GenerateYieldsFile(const std::string &filename, const std::
 
 bool CWaferDataBase::GenerateReportPSI(const std::string &filename)
 {
+	// ----------------------------------------------------------------------
 	FILE *rpt = fopen("report_chip.txt", "at");
 	if (!rpt) return false;
 
@@ -987,6 +988,7 @@ bool CWaferDataBase::GenerateReportPSI(const std::string &filename)
 	}
 	fclose(rpt);
 
+	// ----------------------------------------------------------------------
 	rpt = fopen("report_wafer.txt", "at");
 	if (!rpt) return false;
 
@@ -995,5 +997,39 @@ bool CWaferDataBase::GenerateReportPSI(const std::string &filename)
 	fputs("\n", rpt);
 
 	fclose(rpt);
+
+	// --- Cluster statistic ---------------------------------------------------
+	rpt = fopen("report_cluster.txt", "wt");
+	if (!rpt) return false;
+	
+	int x, y;
+
+	p = GetFirstGood();
+	while (p)
+	{
+		fprintf(rpt, "%s ", waferId.c_str());
+		fprintf(rpt, "%X%X%c  ", p->mapY, p->mapX, "CDAB"[p->mapPos]);
+		
+		for (x = 2; x < 50; x +=2)
+		{
+			int cluster[4] = { 0, 0, 0, 0 };
+			for (y = 0; y < 78; y += 2)
+			{
+				cluster[0] += p->pixmap.GetPulseHeight1(x,   y);
+				cluster[1] += p->pixmap.GetPulseHeight1(x+1, y);
+				cluster[2] += p->pixmap.GetPulseHeight1(x,   y+1);
+				cluster[3] += p->pixmap.GetPulseHeight1(x+1, y+1);
+			}
+
+			fprintf(rpt, "%5.1f %5.1f %5.1f %5.1f   ",
+				cluster[0]/39.0, cluster[1]/39.0, cluster[2]/39.0, cluster[3]/39.0);
+		}
+		fputs("\n", rpt);
+
+		p = GetNextGood(p);
+	}
+
+	fclose(rpt);
+
 	return true;
 }

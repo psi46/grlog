@@ -21,31 +21,31 @@ public:
 	typedef enum
 	{
 // --- table of failcodes -------------------------------------------------
-		FAIL5_BIN1   =  0,	// shortcut (bin 1)
-		FAIL5_BIN2   =  1,	// low current (< 5mA) (bin 2)
-		FAIL5_BIN3   =  2,	// missing token out from ROC (bin 3)
-		FAIL5_BIN4   =  3,	// I2C address decoding error (bin 4)
-		FAIL5_DEF    =  4,	// > 4000 pixel defect
-		FAIL4_COL    =  5,	// dcol defect (not existing for PSI46dig)
-		FAIL4_PIXNUM =  6,	// > 40 pixel defect
-		FAIL4_MASK   =  7,	// non maskable pixel
-		FAIL4_ADDR   =  8,	// pixel with wrong address
-		FAIL4_IDON   =  9,	// ID(on) value out of range
-		FAIL4_IAON   = 10,	// IA(on) value out of range
-		FAIL4_IDINIT = 11,	// ID(init) value out of range
-		FAIL4_IAINIT = 12,	// IA(init) value out of range
-		FAIL3_1PC    = 13,	// > 4 pixel defect
-		FAIL3_TMEAN  = 14,	// Threshold mean value out of range
-		FAIL3_TSTD   = 15,	// Threshold RMS out of range
-		FAIL3_TDIFF  = 16,	// Threoshold col to col difference to high
-		FAIL3_PHOFFS = 17,	// Pulse height offset
-		FAIL3_PHGAIN = 18,	// Pulse height gain
-		FAIL3_PHDIFF = 19,	// Pulse height gain col to col difference to high
+		FAIL5_BIN1   =  0,    // shortcut (bin 1)
+		FAIL5_BIN2   =  1,    // low current (< 5mA) (bin 2)
+		FAIL5_BIN3   =  2,    // missing token out from ROC (bin 3)
+		FAIL5_BIN4   =  3,    // I2C address decoding error (bin 4)
+		FAIL5_DEF    =  4,    // > 4000 pixel defect
+		FAIL4_COL    =  5,    // dcol buffer(s) defect
+		FAIL4_PIXNUM =  6,    // > 40 pixel defect
+		FAIL4_MASK   =  7,    // non maskable pixel
+		FAIL4_ADDR   =  8,    // pixel with wrong address
+		FAIL4_IDON   =  9,    // ID(on) value out of range
+		FAIL4_IAON   = 10,    // IA(on) value out of range
+		FAIL4_IDINIT = 11,    // ID(init) value out of range
+		FAIL4_IAINIT = 12,    // IA(init) value out of range
+		FAIL3_1PC    = 13,    // > 4 pixel defect
+		FAIL3_TMEAN  = 14,    // Threshold mean value out of range
+		FAIL3_TSTD   = 15,    // Threshold RMS out of range
+		FAIL3_TDIFF  = 16,    // Threoshold col to col difference to high
+		FAIL3_PHOFFS = 17,    // Pulse height offset
+		FAIL3_PHGAIN = 18,    // Pulse height gain
+		FAIL3_PHDIFF = 19,    // Pulse height gain col to col difference to high
 		FAIL3_IDCURRENT = 20, // VD current limits
 		FAIL3_IACURRENT = 21, // VA current limits
-		FAIL2_1PM    = 22,	// 1..4 pixel defect
-		FAIL_NOFAIL  = 23,	// No error
-		FAIL_UNDEF   = 24,	// Undefined error
+		FAIL2_1PM    = 22,    // 1..4 pixel defect
+		FAIL_NOFAIL  = 23,    // No error
+		FAIL_UNDEF   = 24     // Undefined error
 	} TFailCode;
 
 
@@ -124,6 +124,9 @@ public:
 	std::string cds_scan;  // scan result caldel 0 to 200
 
 //  [PHSCAN]
+
+//  [DCBUFFER]
+	int dcbuffer;        // 0 = invalid, 1 = all DB ok, 2 = DB error(s)
 
 //	[PIXMAP] [PULSE] [PH1] [PH2] [PUC1] [PUC2] [PUC3]
 	CPixelMap pixmap;

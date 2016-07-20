@@ -72,6 +72,9 @@ void CChip::Clear()
 	cds_del  = 0;
 	cds_scan = "";
 
+	// [DCBUFFER]
+	dcbuffer = 0;
+
 	// [PIXMAP] [PULSE] [PH1] [PH2] [PUC1] [PUC2] [PUC3]
 	pixmap.Init();
 
@@ -416,12 +419,15 @@ void CChip::ReadDCBUFFER(CScanner &Log)
 {
 	Log.getNextLine(); // skip line that contains the section tag
 
+	int errorCnt = 0;
 	// --- read till next tag or empty line
 	while (Log.getNextLine()[0] != 0) // not empty string
 	{
-		// todo
-		// access to current line with Log.getLine();
+		if (strncmp(Log.getLine(), ". . . . . . . . . . . . . . . . . . . . . . . . . .", 51) != 0)
+			errorCnt++;
 	}
+
+	dcbuffer = errorCnt ? 2 : 1;
 
 	Log.getNextSection();
 }
@@ -708,6 +714,8 @@ void CChip::CalculatePhase2()
 	// --- class 4 -------------------------------------------------------
 	chipClass = pickClass = 4;
 
+	if (dcbuffer != 1) { CHIPFAIL(FAIL4_COL) }
+
 	if (nPixDefect     > 40) { CHIPFAIL(FAIL4_PIXNUM) }
 	if (nPixThrOr      > 40) { CHIPFAIL(FAIL4_PIXNUM) }
 	if (nPixUnmaskable > 0)  { CHIPFAIL(FAIL4_MASK) }
@@ -731,7 +739,7 @@ void CChip::CalculatePhase2()
 
 	if (pm    < 110.0 || 160.0 < pm)    CHIPFAIL(FAIL3_TMEAN)
 	if (pstd  <   2.0 ||   9.0 < pstd)  CHIPFAIL(FAIL3_TSTD)
-	if (pm_col_max > 5.0)               CHIPFAIL(FAIL3_TDIFF)
+	if (pm_col_max > 6.0)               CHIPFAIL(FAIL3_TDIFF)
 
 
 	if (ph1mean  <  20.0 || 120.0 < ph1mean) CHIPFAIL(FAIL3_PHOFFS)
@@ -783,7 +791,7 @@ void CChip::GenerateFailString()
 
 	// --- class 4 -------------------------------------------------------
 	case FAIL4_COL:
-		failstring = "0 dcol defect"; break; //not used
+		failstring = "DC buffer(s) defect"; break;
 
 	case FAIL4_PIXNUM:
 		failstring = string_printf("%i pixel defect (%i thr, %i ph)",
